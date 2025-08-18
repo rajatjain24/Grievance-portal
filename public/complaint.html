@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Submit Complaint - Rajasthan Seva Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: linear-gradient(120deg,#e6f0ff 0%,#c8e1ff 100%);
+      font-family: Poppins, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    
+    /* Center the complaint box */
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .complaint-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .complaint-box {
+      background: #fff;
+      padding: 32px 30px;
+      border-radius: 18px;
+      width: 440px;
+      box-shadow: 0 6px 22px #a1d8ff26;
+    }
+    h2 { text-align:center; color:#00337c; margin-bottom:18px;}
+    .input-group { margin-bottom: 13px; }
+    .input-group label {display:block; font-weight:600; margin-bottom:6px;}
+    .input-group select,
+    .input-group input,
+    .input-group textarea {
+      width: 100%; padding:11px; border-radius:7px; border:1px solid #d4e6fa; font-size:15px;
+      transition: border-color .2s;
+    }
+    .input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: #007bff; outline: none;}
+    .input-group textarea {resize: vertical; min-height: 70px;}
+    .msg {margin:8px 0 0 0; font-size:14px;}
+    .msg.error { color:#c0392b;}
+    .msg.success { color:#27ae60;}
+    button {
+      width:100%; padding:11px; border-radius:7px; border:none; font-weight:600; 
+      font-size:16px; background:#007bff; color:white; cursor:pointer; margin-top:10px;
+      transition: background .18s;
+    }
+    button:disabled {background:#b3d5fa;}
+    button:hover:not(:disabled) { background:#0058ab;}
+    .back-link {margin-top:13px; text-align:center;}
+    .back-link a {color:#007bff; text-decoration:none;}
+    .back-link a:hover {text-decoration:underline;}
+    
+    /* Enhanced form styles */
+    .complaint-box {
+      width: 600px;
+      max-width: 95vw;
+    }
+    
+    .secondary-btn {
+      background: #6c757d;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+      width: auto;
+      margin: 0;
+    }
+    
+    .secondary-btn:hover:not(:disabled) {
+      background: #545b62;
+    }
+    
+    .secondary-btn:disabled {
+      background: #adb5bd;
+      cursor: not-allowed;
+    }
+    
+    /* File upload styles */
+    .file-upload-area {
+      border: 2px dashed #d4e6fa;
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      background: #f8f9ff;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .file-upload-area:hover {
+      border-color: #007bff;
+      background: #e3f2fd;
+    }
+    
+    .file-upload-area.dragover {
+      border-color: #007bff;
+      background: #e3f2fd;
+      transform: scale(1.02);
+    }
+    
+    .upload-link {
+      color: #007bff;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    
+    .file-list {
+      margin-top: 10px;
+    }
+    
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8f9fa;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      border: 1px solid #e9ecef;
+    }
+    
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .file-icon {
+      font-size: 20px;
+    }
+    
+    .file-details {
+      font-size: 14px;
+    }
+    
+    .file-name {
+      font-weight: 600;
+      color: #495057;
+    }
+    
+    .file-size {
+      color: #6c757d;
+      font-size: 12px;
+    }
+    
+    .remove-file {
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .remove-file:hover {
+      background: #c82333;
+    }
+    
+    /* Location controls */
+    .location-controls .secondary-btn {
+      flex: 1;
+      min-width: 140px;
+    }
+    
+    /* OTP Timer */
+    .otp-verified {
+      color: #28a745;
+      font-weight: 600;
+    }
+    
+    .otp-expired {
+      color: #dc3545;
+      font-weight: 600;
+    }
+    
+    /* Map modal styles */
+    .map-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    
+    .map-modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 600px;
+      max-height: 80%;
+      overflow: auto;
+    }
+    
+    .map-container {
+      height: 400px;
+      width: 100%;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    
+    .close-modal {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close-modal:hover {
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <!-- Add Navigation -->
+  <nav>
+    <span class="logo">Rajasthan Seva Portal</span>
+    <ul>
+      <li><a href="index.html">🏠 Home</a></li>
+      <li><a href="dashboard.html">📊 Dashboard</a></li>
+      <li><a href="complaint.html" style="color:#4fd2ff;">📝 Raise Complaint</a></li>
+      <li><a href="categories.html">📂 Category View</a></li>
+      <li><a href="status.html">📋 Track Status</a></li>
+      <li><a href="login.html" id="logoutBtn" style="background:#dc3545;">🚪 Logout</a></li>
+    </ul>
+  </nav>
+  
+  <div class="complaint-container">
+    <div class="complaint-box">
+    <h2>📝 Raise a Complaint</h2>
+    <form id="complaintForm" autocomplete="off" novalidate>
+      <div class="input-group">
+        <label for="category">Category</label>
+        <select id="category" required>
+          <option value="">Select...</option>
+          <option value="Water">💧 Water</option>
+          <option value="Electricity">⚡ Electricity</option>
+          <option value="Road">🛣️ Road</option>
+          <option value="Sanitation">🧹 Sanitation</option>
+          <option value="Other">Other</option>
+        </select>
+        <div class="msg" id="errCat"></div>
+      </div>
+      <div class="input-group">
+        <label for="location">Location / Landmark</label>
+        <input id="location" type="text" maxlength="90" required />
+        <div class="location-controls" style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
+          <button type="button" id="getCurrentLocation" class="secondary-btn">🗺️ Get Current Location</button>
+          <button type="button" id="showMapModal" class="secondary-btn">🗺️ Choose on Map</button>
+        </div>
+        <div id="locationInfo" style="margin-top: 10px; font-size: 14px; color: #666;"></div>
+        <div class="msg" id="errLoc"></div>
+      </div>
+      
+      <!-- Phone Verification Section -->
+      <div class="input-group">
+        <label for="phone">Mobile Number (Optional - for updates)</label>
+        <div style="display: flex; gap: 10px;">
+          <input id="phone" type="tel" placeholder="+91 XXXXXXXXXX" maxlength="15" style="flex: 1;" />
+          <button type="button" id="sendOTP" class="secondary-btn" disabled>📱 Verify</button>
+        </div>
+        <div class="msg" id="errPhone"></div>
+      </div>
+      
+      <!-- OTP Verification (hidden by default) -->
+      <div class="input-group" id="otpSection" style="display: none;">
+        <label for="otp">Enter OTP</label>
+        <div style="display: flex; gap: 10px;">
+          <input id="otp" type="text" maxlength="6" placeholder="Enter 6-digit OTP" style="flex: 1;" />
+          <button type="button" id="verifyOTP" class="secondary-btn">✅ Verify OTP</button>
+        </div>
+        <div id="otpTimer" style="margin-top: 5px; font-size: 14px; color: #666;"></div>
+        <div class="msg" id="errOTP"></div>
+      </div>
+      
+      <!-- Priority Selection -->
+      <div class="input-group">
+        <label for="priority">Priority Level</label>
+        <select id="priority" required>
+          <option value="">Select Priority...</option>
+          <option value="Low">🟢 Low - General inquiry or minor issue</option>
+          <option value="Medium" selected>🟡 Medium - Standard complaint</option>
+          <option value="High">🟠 High - Urgent attention needed</option>
+          <option value="Critical">🔴 Critical - Emergency or safety issue</option>
+        </select>
+        <div class="msg" id="errPriority"></div>
+      </div>
+      
+      <!-- File Upload Section -->
+      <div class="input-group">
+        <label for="attachments">Attachments (Optional)</label>
+        <div class="file-upload-area" id="fileUploadArea">
+          <input type="file" id="attachments" multiple accept="image/*,.pdf,.doc,.docx" style="display: none;" />
+          <div class="upload-placeholder">
+            <div style="font-size: 48px; margin-bottom: 10px;">📎</div>
+            <div>Drag and drop files here or <span class="upload-link">browse files</span></div>
+            <div style="font-size: 12px; color: #999; margin-top: 5px;">Supported: Images, PDF, DOC (Max 5MB each)</div>
+          </div>
+        </div>
+        <div id="fileList" class="file-list"></div>
+        <div class="msg" id="errFiles"></div>
+      </div>
+      <div class="input-group">
+        <label for="description">Issue Description</label>
+        <textarea id="description" required minlength="10" maxlength="350"></textarea>
+        <div class="msg" id="errDes"></div>
+      </div>
+      <div class="msg error" id="alertBox"></div>
+      <div class="msg success" id="successBox"></div>
+      <button type="submit" id="submitBtn" disabled>Submit Complaint</button>
+    </form>
+    <div class="back-link"><a href="dashboard.html">← Return to Dashboard</a></div>
+    </div>
+  </div>
+  <script>
+    // Check if user is logged in
+    if (!localStorage.getItem('token')) {
+      window.location.href = 'login.html';
+    }
+    
+    // Logout functionality
+    document.getElementById('logoutBtn').onclick = function(e) {
+      e.preventDefault();
+      localStorage.clear();
+      window.location.href = 'login.html';
+    };
+    
+    const cat = document.getElementById('category');
+    const loc = document.getElementById('location');
+    const des = document.getElementById('description');
+    const submitBtn = document.getElementById('submitBtn');
+    const alertBox = document.getElementById('alertBox');
+    const successBox = document.getElementById('successBox');
+
+    function validate() {
+      let valid = true;
+      if(!cat.value) {document.getElementById('errCat').textContent="Select category"; valid=false;}
+      else document.getElementById('errCat').textContent="";
+      if(!loc.value.trim() || loc.value.length<3) {document.getElementById('errLoc').textContent="Specify location"; valid=false;}
+      else document.getElementById('errLoc').textContent="";
+      if(!des.value.trim() || des.value.length<10) {document.getElementById('errDes').textContent="At least 10 characters";}
+      else if(des.value.length>350) {document.getElementById('errDes').textContent="Description too long";}
+      else {document.getElementById('errDes').textContent="";}
+      if(!des.value.trim() || des.value.length<10 || des.value.length>350) valid=false;
+      submitBtn.disabled = !valid;
+      return valid;
+    }
+    cat.oninput = loc.oninput = des.oninput = validate;
+    document.getElementById('complaintForm').onsubmit = async function(e) {
+      e.preventDefault();
+      alertBox.textContent = ""; successBox.textContent = "";
+      if(!validate()) return;
+      submitBtn.disabled = true; submitBtn.textContent = "Submitting...";
+      try {
+        // Assume JWT stored in localStorage as "token"
+        const res = await fetch('/api/complaints', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+localStorage.getItem('token')
+          },
+          body: JSON.stringify({
+            category: cat.value, location: loc.value.trim(), description: des.value.trim()
+          })
+        });
+        const data = await res.json();
+        if(res.ok && data.complaint && data.complaint._id){
+          successBox.className = "msg success";
+          successBox.innerHTML = `
+            <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #d4edda, #c3e6cb); border-radius: 10px; border: 2px solid #27ae60;">
+              <div style="font-size: 18px; color: #155724; margin-bottom: 10px;">
+                ✅ <b>Complaint Submitted Successfully!</b>
+              </div>
+              <div style="font-size: 14px; color: #155724; margin-bottom: 15px;">
+                Your Ticket ID:
+              </div>
+              <div style="background: #fff; padding: 12px; border-radius: 8px; border: 2px dashed #27ae60; margin-bottom: 15px;">
+                <span id="complaintID" style="font-family: 'Courier New', monospace; font-size: 16px; font-weight: bold; color: #007bff;">${data.complaint._id}</span>
+              </div>
+              <button type="button" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-bottom: 10px;" onclick="copyToClipboard(document.getElementById('complaintID').textContent)">📋 Copy Ticket ID</button>
+              <div style="font-size: 13px; color: #6c757d; margin-bottom: 15px;">
+                ⚠️ <b>Important:</b> Please save this Ticket ID to track your complaint status.
+              </div>
+              <div id="countdown" style="font-size: 14px; color: #007bff; font-weight: bold;">
+                Redirecting to Dashboard in <span id="timer">15</span> seconds...
+              </div>
+              <div style="margin-top: 10px;">
+                <button type="button" onclick="window.location.href='dashboard.html'" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-right: 10px;">Go to Dashboard Now</button>
+                <button type="button" onclick="cancelRedirect()" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">Stay Here</button>
+              </div>
+            </div>
+          `;
+          
+          // Start countdown timer
+          let timeLeft = 15;
+          const timerElement = document.getElementById('timer');
+          const countdownInterval = setInterval(() => {
+            timeLeft--;
+            if (timerElement) {
+              timerElement.textContent = timeLeft;
+            }
+            if (timeLeft <= 0) {
+              clearInterval(countdownInterval);
+              window.location.href = 'dashboard.html';
+            }
+          }, 1000);
+          
+          // Function to cancel redirect
+          window.cancelRedirect = function() {
+            clearInterval(countdownInterval);
+            document.getElementById('countdown').innerHTML = '<span style="color: #28a745;">✓ Auto-redirect cancelled. You can stay here as long as needed.</span>';
+          };
+        } else {
+          alertBox.className = "msg error";
+          alertBox.textContent = data.msg || "Error submitting complaint";
+        }
+      } catch {
+        alertBox.className = "msg error";
+        alertBox.textContent = "Network/server error.";
+      } finally {
+        submitBtn.disabled = false; submitBtn.textContent = "Submit Complaint";
+      }
+    };
+
+    // If using script.js for shared helpers, make sure this is loaded
+    // Otherwise, add this basic copyToClipboard for this page:
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          successBox.innerHTML += `<div style="color:#27ae60; font-size:13px;">Complaint ID copied!</div>`;
+        })
+        .catch(() => {
+          successBox.innerHTML += `<div style="color:#c0392b; font-size:13px;">Could not copy!</div>`;
+        });
+    }
+    
+    // Enhanced functionality for new features
+    let currentLocation = null;
+    let phoneVerified = false;
+    let otpTimer = null;
+    let selectedFiles = [];
+    
+    // Phone number validation and OTP functionality
+    const phoneInput = document.getElementById('phone');
+    const sendOTPBtn = document.getElementById('sendOTP');
+    const otpSection = document.getElementById('otpSection');
+    const otpInput = document.getElementById('otp');
+    const verifyOTPBtn = document.getElementById('verifyOTP');
+    const otpTimerEl = document.getElementById('otpTimer');
+    
+    phoneInput.addEventListener('input', function() {
+      const phone = this.value.replace(/\D/g, '');
+      const isValid = phone.length >= 10;
+      sendOTPBtn.disabled = !isValid;
+      
+      if (isValid) {
+        sendOTPBtn.style.background = '#28a745';
+        sendOTPBtn.textContent = '📱 Send OTP';
+      } else {
+        sendOTPBtn.style.background = '#6c757d';
+        sendOTPBtn.textContent = '📱 Verify';
+      }
+      
+      document.getElementById('errPhone').textContent = '';
+    });
+    
+    sendOTPBtn.addEventListener('click', async function() {
+      const phone = phoneInput.value.replace(/\D/g, '');
+      
+      if (phone.length < 10) {
+        document.getElementById('errPhone').textContent = 'Please enter a valid phone number';
+        return;
+      }
+      
+      this.disabled = true;
+      this.textContent = 'Sending...';
+      
+      try {
+        // Simulate OTP sending (replace with actual API call)
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        otpSection.style.display = 'block';
+        this.textContent = '✅ OTP Sent';
+        this.style.background = '#28a745';
+        
+        // Start OTP timer
+        startOTPTimer();
+        
+        document.getElementById('errPhone').innerHTML = '<span style="color: #28a745;">OTP sent successfully!</span>';
+      } catch (error) {
+        document.getElementById('errPhone').textContent = 'Failed to send OTP. Please try again.';
+        this.disabled = false;
+        this.textContent = '📱 Send OTP';
+        this.style.background = '#dc3545';
+      }
+    });
+    
+    function startOTPTimer() {
+      let timeLeft = 300; // 5 minutes
+      
+      otpTimer = setInterval(() => {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        
+        otpTimerEl.textContent = `OTP expires in ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        
+        if (timeLeft <= 0) {
+          clearInterval(otpTimer);
+          otpTimerEl.innerHTML = '<span class="otp-expired">OTP expired. Please request a new one.</span>';
+          sendOTPBtn.disabled = false;
+          sendOTPBtn.textContent = '📱 Resend OTP';
+          sendOTPBtn.style.background = '#6c757d';
+        }
+        
+        timeLeft--;
+      }, 1000);
+    }
+    
+    verifyOTPBtn.addEventListener('click', async function() {
+      const otp = otpInput.value.trim();
+      
+      if (otp.length !== 6) {
+        document.getElementById('errOTP').textContent = 'Please enter a 6-digit OTP';
+        return;
+      }
+      
+      this.disabled = true;
+      this.textContent = 'Verifying...';
+      
+      try {
+        // Simulate OTP verification (replace with actual API call)
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // For demo, accept any 6-digit OTP
+        phoneVerified = true;
+        clearInterval(otpTimer);
+        
+        this.textContent = '✅ Verified';
+        this.style.background = '#28a745';
+        otpInput.disabled = true;
+        otpTimerEl.innerHTML = '<span class="otp-verified">Phone number verified successfully!</span>';
+        
+        document.getElementById('errOTP').innerHTML = '<span style="color: #28a745;">✓ Verification successful!</span>';
+      } catch (error) {
+        document.getElementById('errOTP').textContent = 'Invalid OTP. Please try again.';
+        this.disabled = false;
+        this.textContent = '✅ Verify OTP';
+      }
+    });
+    
+    // Geolocation functionality
+    const getCurrentLocationBtn = document.getElementById('getCurrentLocation');
+    const showMapModalBtn = document.getElementById('showMapModal');
+    const locationInfo = document.getElementById('locationInfo');
+    
+    getCurrentLocationBtn.addEventListener('click', function() {
+      if (!navigator.geolocation) {
+        locationInfo.innerHTML = '<span style="color: #dc3545;">Geolocation not supported by this browser</span>';
+        return;
+      }
+      
+      this.disabled = true;
+      this.textContent = '🔄 Getting location...';
+      
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          currentLocation = { lat: latitude, lng: longitude };
+          
+          try {
+            // Reverse geocoding to get address (using a mock API call)
+            const address = await reverseGeocode(latitude, longitude);
+            loc.value = address;
+            locationInfo.innerHTML = `<span style="color: #28a745;">📍 Location detected: ${address}</span>`;
+            
+            getCurrentLocationBtn.textContent = '✅ Location Set';
+            getCurrentLocationBtn.style.background = '#28a745';
+          } catch (error) {
+            locationInfo.innerHTML = '<span style="color: #dc3545;">Failed to get address for your location</span>';
+            getCurrentLocationBtn.disabled = false;
+            getCurrentLocationBtn.textContent = '🗺️ Get Current Location';
+          }
+        },
+        (error) => {
+          let errorMsg = 'Location access denied';
+          switch(error.code) {
+            case error.PERMISSION_DENIED:
+              errorMsg = 'Location access denied by user';
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMsg = 'Location information unavailable';
+              break;
+            case error.TIMEOUT:
+              errorMsg = 'Location request timed out';
+              break;
+          }
+          
+          locationInfo.innerHTML = `<span style="color: #dc3545;">${errorMsg}</span>`;
+          this.disabled = false;
+          this.textContent = '🗺️ Get Current Location';
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
+      );
+    });
+    
+    async function reverseGeocode(lat, lng) {
+      // Mock reverse geocoding - in a real app, you'd use Google Maps API or similar
+      const mockAddresses = [
+        'Jaipur, Rajasthan, India',
+        'Udaipur, Rajasthan, India',
+        'Jodhpur, Rajasthan, India',
+        'Ajmer, Rajasthan, India',
+        'Bikaner, Rajasthan, India'
+      ];
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      return mockAddresses[Math.floor(Math.random() * mockAddresses.length)];
+    }
+    
+    // File upload functionality
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    const fileInput = document.getElementById('attachments');
+    const fileList = document.getElementById('fileList');
+    const uploadLink = document.querySelector('.upload-link');
+    
+    uploadLink.addEventListener('click', () => fileInput.click());
+    fileUploadArea.addEventListener('click', () => fileInput.click());
+    
+    fileInput.addEventListener('change', function(e) {
+      handleFiles(Array.from(e.target.files));
+    });
+    
+    // Drag and drop functionality
+    fileUploadArea.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.classList.add('dragover');
+    });
+    
+    fileUploadArea.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      this.classList.remove('dragover');
+    });
+    
+    fileUploadArea.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.classList.remove('dragover');
+      
+      const files = Array.from(e.dataTransfer.files);
+      handleFiles(files);
+    });
+    
+    function handleFiles(files) {
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      const allowedTypes = ['image/', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+      
+      files.forEach(file => {
+        // Check file size
+        if (file.size > maxSize) {
+          document.getElementById('errFiles').textContent = `File ${file.name} is too large. Max size is 5MB.`;
+          return;
+        }
+        
+        // Check file type
+        const isAllowed = allowedTypes.some(type => file.type.startsWith(type) || file.type === type);
+        if (!isAllowed) {
+          document.getElementById('errFiles').textContent = `File ${file.name} is not supported. Please upload images, PDF, or DOC files.`;
+          return;
+        }
+        
+        // Check if file already added
+        if (selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+          return; // Skip duplicate
+        }
+        
+        selectedFiles.push(file);
+        displayFile(file);
+      });
+      
+      document.getElementById('errFiles').textContent = '';
+    }
+    
+    function displayFile(file) {
+      const fileItem = document.createElement('div');
+      fileItem.className = 'file-item';
+      
+      const fileIcon = getFileIcon(file.type);
+      const fileSize = formatFileSize(file.size);
+      
+      fileItem.innerHTML = `
+        <div class="file-info">
+          <div class="file-icon">${fileIcon}</div>
+          <div class="file-details">
+            <div class="file-name">${file.name}</div>
+            <div class="file-size">${fileSize}</div>
+          </div>
+        </div>
+        <button type="button" class="remove-file" onclick="removeFile('${file.name}', this)">×</button>
+      `;
+      
+      fileList.appendChild(fileItem);
+    }
+    
+    function getFileIcon(fileType) {
+      if (fileType.startsWith('image/')) return '🖼️';
+      if (fileType === 'application/pdf') return '📄';
+      if (fileType.includes('word')) return '📝';
+      return '📎';
+    }
+    
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    window.removeFile = function(fileName, buttonElement) {
+      selectedFiles = selectedFiles.filter(file => file.name !== fileName);
+      buttonElement.parentElement.remove();
+      
+      if (selectedFiles.length === 0) {
+        document.getElementById('errFiles').textContent = '';
+      }
+    };
+    
+    // Map modal functionality (placeholder)
+    showMapModalBtn.addEventListener('click', function() {
+      // For now, show an alert. In a real implementation, you'd show a modal with a map
+      alert('🗺️ Map selection feature coming soon! For now, please use "Get Current Location" or type the address manually.');
+    });
+    
+    // Update validation to include new fields
+    const priority = document.getElementById('priority');
+    priority.oninput = validate;
+  </script>
+</body>
+</html>

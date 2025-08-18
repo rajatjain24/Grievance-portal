@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sign Up - Rajasthan Seva Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: linear-gradient(120deg,#e6f0ff 0%,#c8e1ff 100%);
+      font-family: Poppins, Arial, sans-serif;
+      display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;
+    }
+    .signup-box {
+      background: #fff;
+      padding: 34px 30px;
+      border-radius: 16px;
+      width: 380px;
+      box-shadow: 0 6px 22px #a1d8ff38;
+    }
+    .signup-box h2 {text-align:center; color:#00337c; margin-bottom:13px;}
+    .input-group { margin-bottom: 14px; }
+    .input-group label {display:block; font-weight:600; margin-bottom:5px;}
+    .input-group input {
+      width: 100%; padding: 11px; border-radius: 7px; border: 1px solid #c9e3fa; font-size: 15px;
+      transition: border-color .2s;
+    }
+    .input-group input:focus { border-color:#007bff; outline:none;}
+    .msg {margin:8px 0 0 0; font-size:14px;}
+    .msg.error { color:#c0392b;}
+    .msg.success { color:#27ae60;}
+    button {
+      width:100%; padding:11px; border-radius: 7px; border:none; font-weight:600; 
+      font-size:16px; background:#007bff; color:white; cursor:pointer; margin-top:6px;
+      transition: background .18s;
+    }
+    button:disabled {background:#b3d5fa; color:#fff;}
+    button:hover:not(:disabled) { background:#0058ab;}
+    .signin-link {margin-top: 14px; text-align:center;}
+    .signin-link a {color:#007bff; text-decoration:none;}
+    .signin-link a:hover {text-decoration:underline;}
+    ul.pass-criteria {margin:5px 0 7px 0; padding-left:18px; font-size:13px;}
+    ul.pass-criteria li {margin-bottom:3px; list-style:none;}
+    ul.pass-criteria span {display:inline-block; width:18px;}
+  </style>
+</head>
+<body>
+  <div class="signup-box">
+    <h2>Create Account</h2>
+    <form id="signupForm" autocomplete="off" novalidate>
+      <div class="input-group">
+        <label for="name">Full Name</label>
+        <input id="name" type="text" required minlength="3" maxlength="30" autocomplete="name" />
+        <div class="msg" id="errName"></div>
+      </div>
+      <div class="input-group">
+        <label for="email">Email Address</label>
+        <input id="email" type="email" required maxlength="40" autocomplete="email"/>
+        <div class="msg" id="errEmail"></div>
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" required minlength="8" maxlength="24" autocomplete="new-password" />
+        <ul class="pass-criteria">
+          <li><span id="pass-length">❌</span> At least 8 characters</li>
+          <li><span id="pass-uppercase">❌</span> 1 uppercase letter</li>
+          <li><span id="pass-special">❌</span> 1 special character (!@#$ etc.)</li>
+        </ul>
+        <div class="msg" id="errPass"></div>
+      </div>
+      <div class="input-group">
+        <label for="cpassword">Confirm Password</label>
+        <input id="cpassword" type="password" required minlength="8" maxlength="24" autocomplete="new-password" />
+        <div class="msg" id="errCPass"></div>
+      </div>
+      <div class="msg error" id="alertBox"></div>
+      <button type="submit" id="registerBtn" disabled>Sign Up</button>
+    </form>
+    <div class="signin-link">Already have an account? <a href="login.html">Login</a></div>
+  </div>
+  <script>
+    // Get elements
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const passInput = document.getElementById('password');
+    const cpassInput = document.getElementById('cpassword');
+    const registerBtn = document.getElementById('registerBtn');
+    const alertBox = document.getElementById('alertBox');
+
+    // Password rules check
+    function checkPasswordStrength(pwd) {
+      const hasLength = pwd.length >= 8;
+      const hasUpper = /[A-Z]/.test(pwd);
+      const hasSpecial = /[!@#$%^&*()_\-+=\[\]{};:'",.<>/?\\|`~]/.test(pwd);
+      document.getElementById('pass-length').textContent = hasLength ? '✔️' : '❌';
+      document.getElementById('pass-uppercase').textContent = hasUpper ? '✔️' : '❌';
+      document.getElementById('pass-special').textContent = hasSpecial ? '✔️' : '❌';
+      return hasLength && hasUpper && hasSpecial;
+    }
+
+    function validate() {
+      let valid = true;
+      // Name
+      if(!/^[a-zA-Z\s]{3,}$/.test(nameInput.value.trim())) {
+        document.getElementById('errName').textContent = "Min 3 letters, only alphabets/spaces";
+        valid = false;
+      } else document.getElementById('errName').textContent = "";
+
+      // Email
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+        document.getElementById('errEmail').textContent = "Invalid email format";
+        valid = false;
+      } else document.getElementById('errEmail').textContent = "";
+
+      // Password — check all criteria
+      const pwd = passInput.value;
+      const cPwd = cpassInput.value;
+      let pwdValid = checkPasswordStrength(pwd);
+      if(!pwdValid) {
+        document.getElementById('errPass').textContent = "Password must meet all criteria above";
+        valid = false;
+      } else document.getElementById('errPass').textContent = "";
+
+      // Confirm Password
+      if(pwd!==cPwd || !pwd) {
+        document.getElementById('errCPass').textContent = "Passwords do not match";
+        valid = false;
+      } else document.getElementById('errCPass').textContent = "";
+
+      registerBtn.disabled = !valid;
+      return valid;
+    }
+
+    nameInput.oninput = emailInput.oninput = passInput.oninput = cpassInput.oninput = validate;
+    passInput.oninput = function(e){checkPasswordStrength(e.target.value); validate();}
+
+    document.getElementById('signupForm').onsubmit = async function(e){
+      e.preventDefault();
+      alertBox.textContent = "";
+      if(!validate()) return;
+      // Live backend:
+      registerBtn.disabled = true; registerBtn.textContent = "Registering...";
+      try {
+        const res = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: nameInput.value.trim(),
+            email: emailInput.value.trim(),
+            password: passInput.value.trim()
+          })
+        });
+        const data = await res.json();
+        if(res.ok){
+          alertBox.className = "msg success"; alertBox.textContent = "Registered! Please login.";
+          setTimeout(()=>window.location.href="login.html",900);
+        } else {
+          alertBox.className = "msg error"; alertBox.textContent = data.msg || "Signup failed";
+        }
+      } catch {
+        alertBox.className = "msg error"; alertBox.textContent = "Network/server error!";
+      } finally {
+        registerBtn.disabled = false; registerBtn.textContent = "Sign Up";
+      }
+    };
+  </script>
+</body>
+</html>

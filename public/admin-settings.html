@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>⚙️ Settings - Rajasthan Seva Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #2c3e50; overflow-x: hidden; }
+    .admin-layout { display: flex; min-height: 100vh; }
+    .sidebar { width: 280px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); box-shadow: 0 0 30px rgba(0, 0, 0, 0.1); z-index: 1000; position: fixed; height: 100vh; overflow-y: auto; }
+    .sidebar-header { padding: 2rem 1.5rem; border-bottom: 1px solid rgba(102, 126, 234, 0.1); text-align: center; }
+    .admin-logo { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
+    .admin-subtitle { font-size: 12px; color: #64748b; font-weight: 500; }
+    .nav-menu { padding: 1rem 0; }
+    .nav-item { list-style: none; margin: 0.25rem 0; }
+    .nav-link { display: flex; align-items: center; gap: 12px; padding: 0.75rem 1.5rem; color: #64748b; text-decoration: none; transition: all 0.3s ease; border-radius: 0 25px 25px 0; margin-right: 1rem; font-weight: 500; }
+    .nav-link:hover { background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1)); color: #667eea; transform: translateX(5px); }
+    .nav-link.active { background: linear-gradient(135deg, #667eea, #764ba2); color: white; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); }
+    .nav-link i { width: 20px; text-align: center; font-size: 16px; }
+    .badge { background: #ef4444; color: white; font-size: 11px; padding: 2px 6px; border-radius: 10px; font-weight: 600; margin-left: auto; }
+    .main-content { margin-left: 280px; flex: 1; padding: 2rem; background: rgba(255, 255, 255, 0.05); }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .page-title { color: white; font-size: 2rem; font-weight: 700; }
+    .admin-actions { display: flex; gap: 1rem; align-items: center; }
+    .admin-profile { display: flex; align-items: center; gap: 12px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 25px; color: white; }
+    .profile-avatar { width: 40px; height: 40px; background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+    .logout-btn { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-weight: 500; transition: all 0.3s ease; }
+    .logout-btn:hover { background: #ef4444; color: white; }
+    .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; }
+    .settings-section { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 20px; padding: 2rem; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
+    .section-title { font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-label { display: block; font-size: 0.875rem; font-weight: 600; color: #374151; margin-bottom: 0.5rem; }
+    .form-input, .form-select, .form-textarea { width: 100%; padding: 0.75rem 1rem; border: 1px solid rgba(102, 126, 234, 0.2); border-radius: 8px; font-size: 0.875rem; background: white; transition: all 0.3s ease; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+    .form-textarea { resize: vertical; min-height: 100px; }
+    .toggle-switch { position: relative; display: inline-block; width: 60px; height: 30px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #ccc; transition: 0.4s; border-radius: 30px; }
+    .toggle-slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 4px; bottom: 4px; background: white; transition: 0.4s; border-radius: 50%; }
+    input:checked + .toggle-slider { background: #667eea; }
+    input:checked + .toggle-slider:before { transform: translateX(30px); }
+    .btn { padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; border: none; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3); }
+    .btn-secondary { background: rgba(102, 126, 234, 0.1); color: #667eea; border: 1px solid rgba(102, 126, 234, 0.2); }
+    .btn-danger { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+    .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05); }
+    .setting-row:last-child { border-bottom: none; }
+    .setting-info h4 { font-size: 1rem; font-weight: 600; color: #1f2937; margin-bottom: 0.25rem; }
+    .setting-info p { font-size: 0.875rem; color: #64748b; }
+    @media (max-width: 1024px) { .sidebar { transform: translateX(-100%); } .main-content { margin-left: 0; } .settings-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) { .main-content { padding: 1rem; } }
+  </style>
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="admin-logo">🏛️ Admin Portal</div>
+        <div class="admin-subtitle">Rajasthan Seva Management</div>
+      </div>
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item"><a href="admin.html" class="nav-link"><i class="fas fa-chart-pie"></i><span>Dashboard</span></a></li>
+          <li class="nav-item"><a href="admin-complaints.html" class="nav-link"><i class="fas fa-inbox"></i><span>All Complaints</span><span class="badge">247</span></a></li>
+          <li class="nav-item"><a href="admin-analytics.html" class="nav-link"><i class="fas fa-chart-line"></i><span>Analytics</span></a></li>
+          <li class="nav-item"><a href="admin-users.html" class="nav-link"><i class="fas fa-users"></i><span>Users Management</span></a></li>
+          <li class="nav-item"><a href="admin-departments.html" class="nav-link"><i class="fas fa-building"></i><span>Departments</span></a></li>
+          <li class="nav-item"><a href="admin-reports.html" class="nav-link"><i class="fas fa-file-alt"></i><span>Reports</span></a></li>
+          <li class="nav-item"><a href="admin-settings.html" class="nav-link active"><i class="fas fa-cog"></i><span>Settings</span></a></li>
+          <li class="nav-item"><a href="admin-notifications.html" class="nav-link"><i class="fas fa-bell"></i><span>Notifications</span><span class="badge">3</span></a></li>
+          <li class="nav-item"><a href="index.html" class="nav-link"><i class="fas fa-home"></i><span>Back to Portal</span></a></li>
+        </ul>
+      </nav>
+    </aside>
+    
+    <main class="main-content">
+      <div class="top-bar">
+        <h1 class="page-title">System Settings</h1>
+        <div class="admin-actions">
+          <div class="admin-profile">
+            <div class="profile-avatar">AD</div>
+            <span>Admin User</span>
+          </div>
+          <a href="#" id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+      
+      <div class="settings-grid">
+        <!-- General Settings -->
+        <div class="settings-section">
+          <h2 class="section-title"><i class="fas fa-cog"></i>General Settings</h2>
+          <form>
+            <div class="form-group">
+              <label class="form-label">Portal Name</label>
+              <input type="text" class="form-input" value="Rajasthan Seva Portal" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Default Language</label>
+              <select class="form-select">
+                <option>English</option>
+                <option>Hindi</option>
+                <option>Rajasthani</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Timezone</label>
+              <select class="form-select">
+                <option>Asia/Kolkata (IST)</option>
+                <option>UTC</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </form>
+        </div>
+
+        <!-- Notification Settings -->
+        <div class="settings-section">
+          <h2 class="section-title"><i class="fas fa-bell"></i>Notifications</h2>
+          <div class="setting-row">
+            <div class="setting-info">
+              <h4>Email Notifications</h4>
+              <p>Send email alerts for new complaints</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <h4>SMS Notifications</h4>
+              <p>Send SMS updates to users</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <h4>Real-time Alerts</h4>
+              <p>Push notifications for critical issues</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Security Settings -->
+        <div class="settings-section">
+          <h2 class="section-title"><i class="fas fa-shield-alt"></i>Security</h2>
+          <div class="form-group">
+            <label class="form-label">Session Timeout (minutes)</label>
+            <input type="number" class="form-input" value="30" min="5" max="480" />
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <h4>Two-Factor Authentication</h4>
+              <p>Enable 2FA for admin accounts</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <div class="setting-info">
+              <h4>Force Password Reset</h4>
+              <p>Require users to change passwords every 90 days</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <button class="btn btn-primary">Update Security</button>
+        </div>
+
+        <!-- System Maintenance -->
+        <div class="settings-section">
+          <h2 class="section-title"><i class="fas fa-tools"></i>System Maintenance</h2>
+          <div class="form-group">
+            <label class="form-label">Maintenance Mode</label>
+            <div class="setting-row">
+              <div class="setting-info">
+                <h4>Enable Maintenance Mode</h4>
+                <p>Temporarily disable public access</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox">
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Maintenance Message</label>
+            <textarea class="form-textarea" placeholder="System maintenance in progress. Please check back later."></textarea>
+          </div>
+          <div style="display: flex; gap: 1rem;">
+            <button class="btn btn-primary">Save Settings</button>
+            <button class="btn btn-danger" onclick="clearCache()">Clear Cache</button>
+          </div>
+        </div>
+
+        <!-- Email Configuration -->
+        <div class="settings-section">
+          <h2 class="section-title"><i class="fas fa-envelope"></i>Email Settings</h2>
+          <form>
+            <div class="form-group">
+              <label class="form-label">SMTP Server</label>
+              <input type="text" class="form-input" value="smtp.rajgov.in" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">SMTP Port</label>
+              <input type="number" class="form-input" value="587" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">From Email</label>
+              <input type="email" class="form-input" value="noreply@rajgov.in" />
+            </div>
+            <div class="setting-row">
+              <div class="setting-info">
+                <h4>Use SSL/TLS</h4>
+                <p>Enable secure email transmission</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <button type="submit" class="btn btn-primary">Test & Save</button>
+          </form>
+        </div>
+
+        <!-- Backup & Recovery -->
+        <div class="settings-section">
+          <h2 class="section-title"><i class="fas fa-database"></i>Backup & Recovery</h2>
+          <div class="form-group">
+            <label class="form-label">Automatic Backups</label>
+            <div class="setting-row">
+              <div class="setting-info">
+                <h4>Daily Backups</h4>
+                <p>Automatic database backup every 24 hours</p>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" checked>
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Backup Retention (days)</label>
+            <input type="number" class="form-input" value="30" min="1" max="365" />
+          </div>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="createBackup()">Create Backup Now</button>
+            <button class="btn btn-secondary" onclick="viewBackups()">View Backups</button>
+            <button class="btn btn-secondary" onclick="restoreBackup()">Restore</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if(localStorage.getItem("role") !== "admin" || !localStorage.getItem("token")) {
+        window.location.href = "admin-login.html";
+      }
+    });
+    
+    document.getElementById('logoutBtn').onclick = function(e){
+      e.preventDefault();
+      localStorage.clear();
+      window.location.href = "admin-login.html";
+    };
+    
+    function clearCache() {
+      if(confirm('Are you sure you want to clear the system cache? This may temporarily slow down the system.')) {
+        alert('Cache cleared successfully! System performance may be temporarily affected.');
+      }
+    }
+    
+    function createBackup() {
+      alert('Creating system backup...\n\nThis would:\n• Export database\n• Backup uploaded files\n• Create system snapshot\n• Store in secure location');
+    }
+    
+    function viewBackups() {
+      alert('Backup History\n\nThis would show:\n• List of all backups\n• File sizes and dates\n• Download options\n• Restore points');
+    }
+    
+    function restoreBackup() {
+      alert('Restore from Backup\n\nThis would allow:\n• Select backup point\n• Preview changes\n• Confirm restoration\n• System rollback');
+    }
+  </script>
+</body>
+</html>

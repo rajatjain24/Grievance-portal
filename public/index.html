@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rajasthan Seva Portal - Digital Governance Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css">
+  <style>
+    /* Page Specific Styles */
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .stats-grid {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-2xl);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .stat-item {
+      text-align: center;
+      padding: var(--space-6);
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--accent-gold);
+      display: block;
+      margin-bottom: var(--space-2);
+    }
+    
+    .stat-label {
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+    }
+    
+    .feature-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto var(--space-4);
+      background: var(--gradient-primary);
+      border-radius: var(--radius-2xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+    }
+    
+    .notification-dot {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 8px;
+      height: 8px;
+      background: var(--error);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.1); }
+    }
+    
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      z-index: 1001;
+    }
+    
+    .mobile-menu.active {
+      transform: translateX(0);
+    }
+    
+    .mobile-menu-content {
+      padding: var(--space-20) var(--space-6) var(--space-6);
+    }
+    
+    .mobile-nav-links {
+      list-style: none;
+      margin-bottom: var(--space-8);
+    }
+    
+    .mobile-nav-link {
+      display: block;
+      padding: var(--space-4) 0;
+      color: var(--gray-800);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.125rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    
+    .mobile-nav-link:hover {
+      color: var(--primary-blue);
+    }
+    
+    .mobile-close {
+      position: absolute;
+      top: var(--space-6);
+      right: var(--space-6);
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--gray-600);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container nav-content">
+      <a href="index.html" class="nav-logo">
+        <img src="https://images.unsplash.com/photo-1594736797933-d0801ba2fe65?w=40&h=40&fit=crop&crop=center" alt="Rajasthan Government">
+        <span>Rajasthan Seva</span>
+      </a>
+      
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link active">Home</a></li>
+        <li><a href="complaint.html" class="nav-link">File Complaint</a></li>
+        <li><a href="status.html" class="nav-link">Track Status</a></li>
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+      </ul>
+      
+      <div class="nav-actions">
+        <button class="btn btn-ghost relative" id="notifications">
+          <i class="fas fa-bell"></i>
+          <div class="notification-dot"></div>
+        </button>
+        <a href="login.html" class="btn btn-outline">Login</a>
+        <a href="admin-login.html" class="btn btn-primary">Admin</a>
+      </div>
+      
+      <div class="mobile-toggle" id="mobileToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" id="mobileClose">
+      <i class="fas fa-times"></i>
+    </button>
+    <div class="mobile-menu-content">
+      <ul class="mobile-nav-links">
+        <li><a href="index.html" class="mobile-nav-link">Home</a></li>
+        <li><a href="complaint.html" class="mobile-nav-link">File Complaint</a></li>
+        <li><a href="status.html" class="mobile-nav-link">Track Status</a></li>
+        <li><a href="dashboard.html" class="mobile-nav-link">Dashboard</a></li>
+        <li><a href="#about" class="mobile-nav-link">About</a></li>
+      </ul>
+      <div class="flex flex-col gap-3">
+        <a href="login.html" class="btn btn-outline w-full">Login</a>
+        <a href="admin-login.html" class="btn btn-primary w-full">Admin Portal</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero py-20">
+    <div class="container hero-content">
+      <div class="text-center mb-12">
+        <div class="inline-flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-full mb-6">
+          <i class="fas fa-landmark"></i>
+          <span class="font-medium">Government of Rajasthan</span>
+        </div>
+        
+        <h1 class="text-5xl md:text-6xl font-black mb-6">
+          Digital Grievance
+          <span class="block text-yellow-300">Portal</span>
+        </h1>
+        
+        <p class="text-xl text-white text-opacity-90 max-w-2xl mx-auto mb-8">
+          Experience transparent, efficient governance with our modern digital platform. 
+          Submit complaints, track progress, and engage with government services seamlessly.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <a href="complaint.html" class="btn btn-secondary btn-lg">
+            <i class="fas fa-plus"></i>
+            File New Complaint
+          </a>
+          <a href="status.html" class="btn btn-outline btn-lg text-white border-white hover:bg-white hover:text-blue-600">
+            <i class="fas fa-search"></i>
+            Track Status
+          </a>
+        </div>
+      </div>
+      
+      <!-- Statistics -->
+      <div class="stats-grid grid grid-cols-2 md:grid-cols-4 gap-0">
+        <div class="stat-item">
+          <div class="stat-number" id="totalComplaints">125,486</div>
+          <div class="stat-label">Total Complaints</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="resolvedComplaints">98,742</div>
+          <div class="stat-label">Resolved</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="avgResolution">4.2 Days</div>
+          <div class="stat-label">Avg Resolution</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="satisfaction">96%</div>
+          <div class="stat-label">Satisfaction Rate</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-20 bg-gray-50">
+    <div class="container">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">
+          Why Choose Our Platform?
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Built with modern technology to provide citizens with the best possible experience
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-auto gap-8">
+        <div class="card text-center hover:scale-105">
+          <div class="card-body">
+            <div class="feature-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">GPS Integration</h3>
+            <p class="text-gray-600">
+              Precise location tracking for accurate complaint reporting and faster resolution
+            </p>
+          </div>
+        </div>
+        
+        <div class="card text-center hover:scale-105">
+          <div class="card-body">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Secure Authentication</h3>
+            <p class="text-gray-600">
+              OTP-based verification ensures secure and authentic complaint submissions
+            </p>
+          </div>
+        </div>
+        
+        <div class="card text-center hover:scale-105">
+          <div class="card-body">
+            <div class="feature-icon">
+              <i class="fas fa-bell"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Real-time Updates</h3>
+            <p class="text-gray-600">
+              Get instant notifications via SMS and email about your complaint status
+            </p>
+          </div>
+        </div>
+        
+        <div class="card text-center hover:scale-105">
+          <div class="card-body">
+            <div class="feature-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-3">Analytics Dashboard</h3>
+            <p class="text-gray-600">
+              Comprehensive insights and performance metrics for transparent governance
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Actions -->
+  <section class="py-20">
+    <div class="container">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">
+          Quick Actions
+        </h2>
+        <p class="text-xl text-gray-600">
+          Access the most used features with a single click
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <a href="complaint.html" class="card hover:scale-105 cursor-pointer group">
+          <div class="card-body text-center">
+            <div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center text-white text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">
+              <i class="fas fa-plus"></i>
+            </div>
+            <h3 class="font-bold text-lg mb-2">New Complaint</h3>
+            <p class="text-gray-600 text-sm">Submit a new grievance with location and photos</p>
+          </div>
+        </a>
+        
+        <a href="status.html" class="card hover:scale-105 cursor-pointer group">
+          <div class="card-body text-center">
+            <div class="w-16 h-16 bg-secondary rounded-xl flex items-center justify-center text-white text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">
+              <i class="fas fa-search"></i>
+            </div>
+            <h3 class="font-bold text-lg mb-2">Track Status</h3>
+            <p class="text-gray-600 text-sm">Check the progress of your complaints</p>
+          </div>
+        </a>
+        
+        <a href="dashboard.html" class="card hover:scale-105 cursor-pointer group">
+          <div class="card-body text-center">
+            <div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center text-white text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">
+              <i class="fas fa-chart-bar"></i>
+            </div>
+            <h3 class="font-bold text-lg mb-2">Dashboard</h3>
+            <p class="text-gray-600 text-sm">View analytics and complaint history</p>
+          </div>
+        </a>
+        
+        <a href="#help" class="card hover:scale-105 cursor-pointer group">
+          <div class="card-body text-center">
+            <div class="w-16 h-16 bg-secondary rounded-xl flex items-center justify-center text-white text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">
+              <i class="fas fa-question-circle"></i>
+            </div>
+            <h3 class="font-bold text-lg mb-2">Help Center</h3>
+            <p class="text-gray-600 text-sm">Find answers to common questions</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Department Categories -->
+  <section class="py-20 bg-gray-50">
+    <div class="container">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold text-gray-900 mb-4">
+          Department Categories
+        </h2>
+        <p class="text-xl text-gray-600">
+          Select the appropriate department for your complaint
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div class="card cursor-pointer hover:scale-105">
+          <div class="card-body text-center p-4">
+            <i class="fas fa-road text-3xl text-primary mb-3"></i>
+            <h4 class="font-semibold text-sm">Roads & Transport</h4>
+          </div>
+        </div>
+        
+        <div class="card cursor-pointer hover:scale-105">
+          <div class="card-body text-center p-4">
+            <i class="fas fa-bolt text-3xl text-primary mb-3"></i>
+            <h4 class="font-semibold text-sm">Electricity</h4>
+          </div>
+        </div>
+        
+        <div class="card cursor-pointer hover:scale-105">
+          <div class="card-body text-center p-4">
+            <i class="fas fa-tint text-3xl text-primary mb-3"></i>
+            <h4 class="font-semibold text-sm">Water Supply</h4>
+          </div>
+        </div>
+        
+        <div class="card cursor-pointer hover:scale-105">
+          <div class="card-body text-center p-4">
+            <i class="fas fa-graduation-cap text-3xl text-primary mb-3"></i>
+            <h4 class="font-semibold text-sm">Education</h4>
+          </div>
+        </div>
+        
+        <div class="card cursor-pointer hover:scale-105">
+          <div class="card-body text-center p-4">
+            <i class="fas fa-heartbeat text-3xl text-primary mb-3"></i>
+            <h4 class="font-semibold text-sm">Healthcare</h4>
+          </div>
+        </div>
+        
+        <div class="card cursor-pointer hover:scale-105">
+          <div class="card-body text-center p-4">
+            <i class="fas fa-shield-alt text-3xl text-primary mb-3"></i>
+            <h4 class="font-semibold text-sm">Police</h4>
+          </div>
+        </div>
+        
+        <div class="card cursor-pointer hover:scale-105">
+          <div class="card-body text-center p-4">
+            <i class="fas fa-file-alt text-3xl text-primary mb-3"></i>
+            <h4 class="font-semibold text-sm">Revenue</h4>
+          </div>
+        </div>
+        
+        <div class="card cursor-pointer hover:scale-105">
+          <div class="card-body text-center p-4">
+            <i class="fas fa-leaf text-3xl text-primary mb-3"></i>
+            <h4 class="font-semibold text-sm">Environment</h4>
+          </div>
+        </div>
+        
+        <div class="card cursor-pointer hover:scale-105">
+          <div class="card-body text-center p-4">
+            <i class="fas fa-building text-3xl text-primary mb-3"></i>
+            <h4 class="font-semibold text-sm">Urban Development</h4>
+          </div>
+        </div>
+        
+        <div class="card cursor-pointer hover:scale-105">
+          <div class="card-body text-center p-4">
+            <i class="fas fa-ellipsis-h text-3xl text-primary mb-3"></i>
+            <h4 class="font-semibold text-sm">Others</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="container">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <img src="https://images.unsplash.com/photo-1594736797933-d0801ba2fe65?w=40&h=40&fit=crop&crop=center" alt="Rajasthan" class="rounded-lg">
+            <span class="font-bold text-xl">Rajasthan Seva</span>
+          </div>
+          <p class="text-gray-400">
+            Digital governance platform for the citizens of Rajasthan.
+          </p>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold mb-4">Quick Links</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="complaint.html" class="hover:text-white">File Complaint</a></li>
+            <li><a href="status.html" class="hover:text-white">Track Status</a></li>
+            <li><a href="dashboard.html" class="hover:text-white">Dashboard</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold mb-4">Support</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#help" class="hover:text-white">Help Center</a></li>
+            <li><a href="#faq" class="hover:text-white">FAQ</a></li>
+            <li><a href="#contact" class="hover:text-white">Contact</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="font-semibold mb-4">Contact</h4>
+          <div class="text-gray-400 space-y-2">
+            <p><i class="fas fa-phone w-4"></i> 181 (Toll Free)</p>
+            <p><i class="fas fa-envelope w-4"></i> help@rajasthan.gov.in</p>
+            <p><i class="fas fa-clock w-4"></i> 24/7 Support</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2024 Government of Rajasthan. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileClose = document.getElementById('mobileClose');
+
+    mobileToggle.addEventListener('click', () => {
+      mobileMenu.classList.add('active');
+    });
+
+    mobileClose.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+    });
+
+    // Close mobile menu when clicking on links
+    document.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+      });
+    });
+
+    // Animate statistics on page load
+    function animateStats() {
+      const stats = [
+        { id: 'totalComplaints', target: 125486, suffix: '' },
+        { id: 'resolvedComplaints', target: 98742, suffix: '' },
+        { id: 'avgResolution', target: 4.2, suffix: ' Days', decimal: true },
+        { id: 'satisfaction', target: 96, suffix: '%' }
+      ];
+
+      stats.forEach(stat => {
+        const element = document.getElementById(stat.id);
+        if (!element) return;
+
+        let current = 0;
+        const increment = stat.target / 100;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= stat.target) {
+            current = stat.target;
+            clearInterval(timer);
+          }
+          
+          if (stat.decimal) {
+            element.textContent = current.toFixed(1) + stat.suffix;
+          } else {
+            element.textContent = Math.floor(current).toLocaleString() + stat.suffix;
+          }
+        }, 20);
+      });
+    }
+
+    // Run animation when page loads
+    window.addEventListener('load', animateStats);
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

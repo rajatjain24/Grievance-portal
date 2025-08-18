@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Track Complaint Status - Rajasthan Seva Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: linear-gradient(120deg,#e6f0ff 0%,#c8e1ff 100%);
+      font-family: Poppins, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .status-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .status-box {
+      background: #fff;
+      padding: 37px 32px 27px 32px;
+      border-radius: 18px;
+      width: 410px;
+      box-shadow: 0 7px 26px #a1d8ff38;
+    }
+    h2 { text-align:center; color:#00337c; margin-bottom:17px;}
+    .input-group { margin-bottom: 17px; }
+    .input-group label {display:block; font-weight:600; margin-bottom:7px;}
+    .input-group input {
+      width: 100%; padding: 11px; border-radius:7px; border:1px solid #c9e3fa; font-size:15px;
+    }
+    .input-group input:focus { border-color: #007bff; outline: none;}
+    .msg {margin:8px 0 0 0; font-size:15px;}
+    .msg.error { color:#c0392b;}
+    .msg.success { color:#27ae60;}
+    button {
+      width:100%; padding:12px; border-radius: 8px; border:none; font-weight:600;
+      font-size:16px; background:#007bff; color:white; cursor:pointer; margin-top:9px;
+      transition: background .16s;
+    }
+    button:disabled {background:#b3d5fa;}
+    button:hover:not(:disabled) { background:#0058ab;}
+    .tracker {margin: 26px 0 0 0;}
+    .steps {display:flex; justify-content:space-between; margin-bottom:8px;}
+    .step {
+      width:42px;height:42px;border-radius:50%;
+      background:#eee; color:#bbb;font-weight:bold; font-size:17px;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 1px 8px #79c6ea0c;transition:.18s;
+    }
+    .step.active {background: #007bff; color:#fff;}
+    .labels {display:flex; justify-content:space-between;font-size:13px;}
+    .summary {margin:16px 0 0 0; font-size:15px; color:#00337c;}
+    .nodata {text-align:center; color: #c0392b; margin:23px 0 0 0;}
+    .copy-btn { margin-left:13px; background:#4fd2ff; color:#fff; border:none; padding:6px 11px; border-radius:7px; cursor:pointer;}
+  </style>
+</head>
+<body>
+  <!-- Add Navigation -->
+  <nav>
+    <span class="logo">Rajasthan Seva Portal</span>
+    <ul>
+      <li><a href="index.html">🏠 Home</a></li>
+      <li><a href="dashboard.html">📊 Dashboard</a></li>
+      <li><a href="complaint.html">📝 Raise Complaint</a></li>
+      <li><a href="categories.html">📂 Category View</a></li>
+      <li><a href="status.html" style="color:#4fd2ff;">📋 Track Status</a></li>
+      <li><a href="login.html" id="logoutBtn" style="background:#dc3545;">🚪 Logout</a></li>
+    </ul>
+  </nav>
+  
+  <div class="status-container">
+    <div class="status-box">
+    <h2>Track Your Complaint</h2>
+    <form id="statusForm" autocomplete="off" novalidate>
+      <div class="input-group">
+        <label for="ticket">Enter Ticket ID</label>
+        <input id="ticket" type="text" required maxlength="30" placeholder="e.g., 64e4fa89d2894df..." />
+        <div class="msg error" id="errTicket"></div>
+      </div>
+      <button type="submit" id="checkBtn">Check Status</button>
+      <div class="msg error" id="alertBox"></div>
+    </form>
+    <div class="tracker" id="tracker" style="display:none;">
+      <div class="summary" id="trackSummary"></div>
+      <div>
+        <b>Ticket:</b> <span id="showTicket" style="font-family:monospace;"></span>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('showTicket').textContent).then(()=>alert('Copied!'));">📋 Copy</button>
+      </div>
+      <div class="steps" id="stepsRow">
+        <div class="step" id="step1">1</div>
+        <div class="step" id="step2">2</div>
+        <div class="step" id="step3">3</div>
+        <div class="step" id="step4">4</div>
+      </div>
+      <div class="labels">
+        <span>Registered</span>
+        <span>Processing</span>
+        <span>Review</span>
+        <span>Resolved</span>
+      </div>
+    </div>
+    <div class="nodata" id="nodata" style="display:none;"></div>
+    </div>
+  </div>
+  <script>
+    // Check if user is logged in
+    if (!localStorage.getItem('token')) {
+      window.location.href = 'login.html';
+    }
+    
+    // Logout functionality
+    document.getElementById('logoutBtn').onclick = function(e) {
+      e.preventDefault();
+      localStorage.clear();
+      window.location.href = 'login.html';
+    };
+    
+    const statuses = ['Registered','Processing','Review','Resolved'];
+    function highlightSteps(idx){
+      for(let i=0;i<4;i++){
+        document.getElementById('step'+(i+1)).className = "step" + (i<=idx?" active":"");
+      }
+    }
+    document.getElementById('statusForm').onsubmit = async function(e){
+      e.preventDefault();
+      document.getElementById('tracker').style.display = "none";
+      document.getElementById('nodata').style.display = "none";
+      document.getElementById('alertBox').textContent = "";
+      const ticket = document.getElementById('ticket').value.trim();
+      if(!ticket || ticket.length<8){
+        document.getElementById('errTicket').textContent = "Please enter a valid Ticket ID!";
+        return;
+      } else {
+        document.getElementById('errTicket').textContent = "";
+      }
+      document.getElementById('checkBtn').disabled = true;
+      try {
+        let res = await fetch(`/api/complaints/${ticket}`, {
+          headers: {"Authorization":"Bearer "+localStorage.getItem("token")}
+        });
+        let data = await res.json();
+        if(!res.ok){ throw Error(data.msg||"Not found."); }
+        // Show tracker
+        document.getElementById('showTicket').textContent = data._id||ticket;
+        document.getElementById('tracker').style.display = "";
+        let idx=statuses.indexOf(data.status||'Registered');
+        highlightSteps(idx>=0?idx:0);
+        document.getElementById('trackSummary').textContent = `Status: ${data.status} | Category: ${data.category} | Raised: ${(new Date(data.createdAt)).toLocaleString()}`;
+      } catch {
+        document.getElementById('nodata').style.display = "";
+        document.getElementById('nodata').textContent = "Ticket ID not found or error. Check and try again!";
+      } finally {
+        document.getElementById('checkBtn').disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

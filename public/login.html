@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - Rajasthan Seva Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: linear-gradient(120deg,#e6f0ff 0%,#c8e1ff 100%);
+      font-family: Poppins, Arial, sans-serif;
+      display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;
+    }
+    .login-box {
+      background: #fff;
+      padding: 34px 30px;
+      border-radius: 16px;
+      width: 370px;
+      box-shadow: 0 6px 22px #a1d8ff38;
+    }
+    .login-box h2 { text-align:center; color:#00337c; margin-bottom:14px;}
+    .input-group { margin-bottom: 15px; }
+    .input-group label {display:block; font-weight:600; margin-bottom:5px;}
+    .input-group input {
+      width: 100%; padding: 11px; border-radius: 7px; border: 1px solid #c9e3fa; font-size: 15px;
+      transition: border-color .2s;
+    }
+    .input-group input:focus { border-color:#007bff; outline:none;}
+    .msg {margin:8px 0 0 0; font-size:14px;}
+    .msg.error { color:#c0392b;}
+    .msg.success { color:#27ae60;}
+    button {
+      width:100%; padding:11px; border-radius: 7px; border:none; font-weight:600; 
+      font-size:16px; background:#007bff; color:white; cursor:pointer; margin-top:6px;
+      transition: background .18s;
+    }
+    button:disabled {background:#b3d5fa; color:#fff;}
+    button:hover:not(:disabled) { background:#0058ab;}
+    .signup-link {margin-top: 14px; text-align:center;}
+    .signup-link a {color:#007bff; text-decoration:none;}
+    .signup-link a:hover {text-decoration:underline;}
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>User Login</h2>
+    <form id="loginForm" autocomplete="off" novalidate>
+      <div class="input-group">
+        <label for="email">Email Address</label>
+        <input id="email" type="email" required maxlength="40" />
+        <div class="msg" id="errEmail"></div>
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" required minlength="6" maxlength="20" />
+        <div class="msg" id="errPass"></div>
+      </div>
+      <div class="msg error" id="alertBox"></div>
+      <button type="submit" id="loginBtn" disabled>Login</button>
+    </form>
+    <div class="signup-link">
+      Don't have an account? <a href="signup.html">Sign up here</a>
+    </div>
+  </div>
+  <script>
+    const emailInput = document.getElementById('email');
+    const passInput = document.getElementById('password');
+    const loginBtn = document.getElementById('loginBtn');
+    const alertBox = document.getElementById('alertBox');
+
+    function validate() {
+      let valid = true;
+      // Email
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+        document.getElementById('errEmail').textContent = "Enter a valid email.";
+        valid = false;
+      } else document.getElementById('errEmail').textContent = "";
+      // Password
+      if(passInput.value.length<6) {
+        document.getElementById('errPass').textContent = "Password must be at least 6 chars.";
+        valid = false;
+      } else document.getElementById('errPass').textContent = "";
+      loginBtn.disabled = !valid;
+      return valid;
+    }
+
+    emailInput.oninput = passInput.oninput = validate;
+
+    document.getElementById('loginForm').onsubmit = async function(e){
+      e.preventDefault();
+      alertBox.textContent = "";
+      if(!validate()) return;
+      loginBtn.disabled = true; loginBtn.textContent = "Logging in…";
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: emailInput.value.trim(),
+            password: passInput.value.trim()
+          })
+        });
+        const data = await res.json();
+        if(res.ok){
+          // Store token, role, username
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("role", data.role);
+          if(data.role==="admin")
+            window.location.href = "admin.html";
+          else
+            window.location.href = "dashboard.html";
+        } else {
+          alertBox.className = "msg error"; alertBox.textContent = data.msg||"Login failed";
+        }
+      } catch {
+        alertBox.className = "msg error"; alertBox.textContent = "Server error!";
+      } finally {
+        loginBtn.disabled = false; loginBtn.textContent = "Login";
+      }
+    };
+  </script>
+</body>
+</html>

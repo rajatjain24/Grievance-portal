@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Complaint Categories - Rajasthan Seva Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    body {
+      font-family: Poppins, Arial, sans-serif;
+      background: linear-gradient(120deg,#e6f0ff 0%,#c8e1ff 100%);
+      margin:0; padding:0;
+    }
+    nav {
+      background: #00337c;
+      color: #fff;
+      padding: 15px 34px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {font-size:23px;color:#4fd2ff;font-weight:700;}
+    nav ul {list-style:none;display:flex;gap:17px;margin:0;padding:0;}
+    nav ul li a {color:#fff!important;text-decoration:none;font-weight:500;padding:6px 13px;border-radius:6px;}
+    nav ul li a:hover {background: #ffffff12; color:#4fd2ff;}
+    .main { max-width:970px; margin: 38px auto; background: #fff; border-radius:17px;
+            box-shadow: 0 8px 30px #0099ff22; padding: 34px 28px 24px 28px;}
+    h2 {color:#00337c; text-align:center;}
+    .cat-cards { display: flex; flex-wrap: wrap; gap: 29px; justify-content: center; margin: 25px 0; }
+    .cat-card {
+      background: #f1f8ff; width:190px; border-radius:13px; padding:29px 12px 21px 12px;
+      text-align:center; box-shadow:0 3px 12px #008cff16; transition:.14s; cursor:pointer;
+      border:2px solid #e0f1ff;
+    }
+    .cat-card:hover { background: #e1f5ff; transform:translateY(-4px) scale(1.045);}
+    .cat-card .icon { font-size:33px; margin-bottom:9px;}
+    .cat-card .count {font-weight:700; color:#007bff; font-size:17px;}
+    .cat-card .title {font-size:18px; color:#004999; font-weight:600; margin-bottom:8px;}
+    .selected {box-shadow:0 6px 20px #15aaff38; border:2.3px solid #33bcff;}
+
+    /* Complaints list styling */
+    .results-section { margin-top:40px; }
+    table {width:100%; border-collapse:collapse; margin-top:18px;}
+    th, td {padding:11px 8px; border-bottom:1px solid #f2f2f2;}
+    th {background:#f4faff; color:#006bbc;}
+    .status-chip {padding:6px 13px; border-radius:13px; font-weight:600;}
+    .status-Registered{background:#e3e8ed; color:#606060;}
+    .status-Processing{background:#d2ebff; color:#157af6;}
+    .status-Review{background:#fff1d6; color:#e88800;}
+    .status-Resolved{background:#ddf7e2; color:#059033;}
+    .nodata {text-align:center; margin:21px; color: #aaa;}
+    @media(max-width:900px){.main{padding:10vw 4vw;}.cat-cards{gap:16px;}}
+    @media(max-width:600px){.cat-card{width:99vw;max-width:98vw;}}
+  </style>
+</head>
+<body>
+<nav>
+  <span class="logo">Rajasthan Seva Portal</span>
+  <ul>
+    <li><a href="index.html">🏠 Home</a></li>
+    <li><a href="dashboard.html">📊 Dashboard</a></li>
+    <li><a href="complaint.html">📝 Raise Complaint</a></li>
+    <li><a href="categories.html" style="color:#4fd2ff;">📂 Categories</a></li>
+    <li><a href="status.html">📋 Track Status</a></li>
+    <li><a href="login.html" id="logoutBtn" style="background:#dc3545;">🚪 Logout</a></li>
+  </ul>
+</nav>
+<div class="main">
+  <h2>Complaint Categories</h2>
+  <div class="cat-cards" id="catCards"></div>
+  <hr style="margin:22px 0;">
+  <div class="results-section" id="catResults" style="display:none">
+    <h3 id="catHeader"></h3>
+    <div class="nodata" id="nodata" style="display:none;">No complaints.</div>
+    <div style="overflow-x:auto">
+    <table id="complaintsTable">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Location</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Date / Time</th>
+        </tr>
+      </thead>
+      <tbody id="complaintsBody"></tbody>
+    </table>
+    </div>
+  </div>
+</div>
+<script>
+const categories = [
+  { title: "Water", icon:"💧" },
+  { title: "Electricity", icon:"⚡" },
+  { title: "Road", icon:"🛣️" },
+  { title: "Sanitation", icon:"🧹" },
+  { title: "Other", icon:"🔖" }
+];
+let allComplaints = [];
+let userComplaints = [];
+let role = localStorage.getItem("role");
+if(!localStorage.getItem('token')) window.location.href="login.html";
+document.getElementById('logoutBtn').onclick = function(e){ e.preventDefault(); localStorage.clear(); window.location.href="login.html"; };
+function renderCategories(){
+  let html = "";
+  let counts = {};
+  for(let c of categories) counts[c.title]=0;
+  for(let cmp of allComplaints) if(counts.hasOwnProperty(cmp.category)) counts[cmp.category]++;
+  for(let c of categories){
+    html += `
+      <div class="cat-card" data-cat="${c.title}">
+        <div class="icon">${c.icon}</div>
+        <div class="title">${c.title}</div>
+        <div class="count">${counts[c.title]||0} complaint${counts[c.title]==1?"":"s"}</div>
+      </div>
+    `;
+  }
+  document.getElementById('catCards').innerHTML = html;
+  setTimeout(()=>{
+    document.querySelectorAll('.cat-card').forEach(card=>{
+      card.onclick = ()=>{selectCategory(card.getAttribute('data-cat'));};
+    });
+  },40);
+}
+function selectCategory(cat){
+  document.querySelectorAll('.cat-card').forEach(card=>{
+    if(card.getAttribute('data-cat')==cat) card.classList.add('selected');
+    else card.classList.remove('selected');
+  });
+  let filtered = allComplaints.filter(c=>c.category===cat);
+  document.getElementById('catHeader').textContent = `${cat} Complaints (${filtered.length})`;
+  let tbody = document.getElementById('complaintsBody');
+  tbody.innerHTML = '';
+  if(filtered.length===0){document.getElementById('nodata').style.display='';}
+  else document.getElementById('nodata').style.display='none';
+  for(let cmp of filtered){
+    tbody.innerHTML += `
+      <tr>
+        <td>${cmp.category||""}</td>
+        <td>${cmp.location||""}</td>
+        <td>${cmp.description||""}</td>
+        <td><span class="status-chip status-${cmp.status.replace(/\s/g,'')}">${cmp.status}</span></td>
+        <td>${(new Date(cmp.createdAt)).toLocaleString()}</td>
+      </tr>
+    `;
+  }
+  document.getElementById('catResults').style.display = '';
+}
+async function fetchComplaints(){
+  try{
+    let res = await fetch('/api/complaints', { headers:{ "Authorization":"Bearer "+localStorage.getItem("token") } });
+    let data = await res.json();
+    if(!res.ok) throw Error(data.msg);
+    allComplaints = (role==='admin') ? data : data.filter(cmp=>cmp.createdBy && cmp.createdBy._id===data[0]?.createdBy?._id);
+    renderCategories();
+  } catch {
+    document.getElementById('catCards').innerHTML = '<div class="nodata">Could not fetch complaints.</div>';
+  }
+}
+window.onload = fetchComplaints;
+</script>
+</body>
+</html>

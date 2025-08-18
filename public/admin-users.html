@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>👥 Users Management - Rajasthan Seva Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #2c3e50;
+      overflow-x: hidden;
+    }
+    
+    /* Admin Layout */
+    .admin-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    .sidebar {
+      width: 280px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+    
+    .sidebar-header {
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+      text-align: center;
+    }
+    
+    .admin-logo {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+    
+    .admin-subtitle {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 500;
+    }
+    
+    .nav-menu {
+      padding: 1rem 0;
+    }
+    
+    .nav-item {
+      list-style: none;
+      margin: 0.25rem 0;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0.75rem 1.5rem;
+      color: #64748b;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border-radius: 0 25px 25px 0;
+      margin-right: 1rem;
+      font-weight: 500;
+    }
+    
+    .nav-link:hover {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+      color: #667eea;
+      transform: translateX(5px);
+    }
+    
+    .nav-link.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+    
+    .nav-link i {
+      width: 20px;
+      text-align: center;
+      font-size: 16px;
+    }
+    
+    .badge {
+      background: #ef4444;
+      color: white;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-weight: 600;
+      margin-left: auto;
+    }
+    
+    /* Main Content */
+    .main-content {
+      margin-left: 280px;
+      flex: 1;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .page-title {
+      color: white;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    
+    .admin-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    
+    .admin-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      color: white;
+    }
+    
+    .profile-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+    
+    .logout-btn {
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .logout-btn:hover {
+      background: #ef4444;
+      color: white;
+    }
+    
+    /* Users Management */
+    .users-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .add-user-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .add-user-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    /* User Stats */
+    .user-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: transform 0.3s ease;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+    
+    .stat-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      color: #667eea;
+    }
+    
+    .stat-label {
+      font-size: 0.875rem;
+      color: #64748b;
+      font-weight: 500;
+    }
+    
+    /* Filters and Search */
+    .filters-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .filters-row {
+      display: flex;
+      gap: 1rem;
+      align-items: end;
+      flex-wrap: wrap;
+    }
+    
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-width: 150px;
+    }
+    
+    .filter-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    
+    .filter-input, .filter-select {
+      padding: 0.75rem 1rem;
+      border: 1px solid rgba(102, 126, 234, 0.2);
+      border-radius: 8px;
+      font-size: 0.875rem;
+      background: white;
+    }
+    
+    .filter-input:focus, .filter-select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    .btn-secondary {
+      background: rgba(102, 126, 234, 0.1);
+      color: #667eea;
+      border: 1px solid rgba(102, 126, 234, 0.2);
+    }
+    
+    /* Users Table */
+    .users-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    
+    .table-container {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .users-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+    
+    .users-table th {
+      background: #f8fafc;
+      color: #374151;
+      font-weight: 600;
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      font-size: 0.875rem;
+    }
+    
+    .users-table td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      font-size: 0.875rem;
+    }
+    
+    .users-table tbody tr:hover {
+      background: rgba(102, 126, 234, 0.02);
+    }
+    
+    /* User Avatar */
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      margin-right: 1rem;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+    
+    .user-details {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .user-name {
+      font-weight: 600;
+      color: #1f2937;
+    }
+    
+    .user-email {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+    
+    /* Status Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-active {
+      background: rgba(16, 185, 129, 0.1);
+      color: #059669;
+    }
+    
+    .status-inactive {
+      background: rgba(107, 114, 128, 0.1);
+      color: #374151;
+    }
+    
+    .status-suspended {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+    
+    /* Role Badges */
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .role-admin {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+    
+    .role-citizen {
+      background: rgba(59, 130, 246, 0.1);
+      color: #2563eb;
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.875rem;
+      transition: all 0.3s ease;
+    }
+    
+    .action-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .btn-view {
+      background: rgba(59, 130, 246, 0.1);
+      color: #2563eb;
+    }
+    
+    .btn-view:hover {
+      background: #2563eb;
+      color: white;
+    }
+    
+    .btn-edit {
+      background: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+    }
+    
+    .btn-edit:hover {
+      background: #d97706;
+      color: white;
+    }
+    
+    .btn-delete {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+    
+    .btn-delete:hover {
+      background: #ef4444;
+      color: white;
+    }
+    
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+    
+    .pagination-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid rgba(102, 126, 234, 0.2);
+      background: white;
+      color: #667eea;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .pagination-btn:hover, .pagination-btn.active {
+      background: #667eea;
+      color: white;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 1rem;
+      }
+      
+      .user-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      .filters-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="admin-logo">🏛️ Admin Portal</div>
+        <div class="admin-subtitle">Rajasthan Seva Management</div>
+      </div>
+      
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="admin.html" class="nav-link">
+              <i class="fas fa-chart-pie"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="admin-complaints.html" class="nav-link">
+              <i class="fas fa-inbox"></i>
+              <span>All Complaints</span>
+              <span class="badge" id="complaintsCount">247</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="admin-analytics.html" class="nav-link">
+              <i class="fas fa-chart-line"></i>
+              <span>Analytics</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="admin-users.html" class="nav-link active">
+              <i class="fas fa-users"></i>
+              <span>Users Management</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="admin-departments.html" class="nav-link">
+              <i class="fas fa-building"></i>
+              <span>Departments</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="admin-reports.html" class="nav-link">
+              <i class="fas fa-file-alt"></i>
+              <span>Reports</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="admin-settings.html" class="nav-link">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="admin-notifications.html" class="nav-link">
+              <i class="fas fa-bell"></i>
+              <span>Notifications</span>
+              <span class="badge">3</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">
+              <i class="fas fa-home"></i>
+              <span>Back to Portal</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="top-bar">
+        <h1 class="page-title">Users Management</h1>
+        <div class="admin-actions">
+          <div class="admin-profile">
+            <div class="profile-avatar">AD</div>
+            <span>Admin User</span>
+          </div>
+          <a href="#" id="logoutBtn" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+          </a>
+        </div>
+      </div>
+      
+      <!-- User Stats -->
+      <div class="user-stats">
+        <div class="stat-card">
+          <div class="stat-icon">👥</div>
+          <div class="stat-number" id="totalUsers">2,847</div>
+          <div class="stat-label">Total Users</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-number" id="activeUsers">2,693</div>
+          <div class="stat-label">Active Users</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">🆕</div>
+          <div class="stat-number" id="newUsers">47</div>
+          <div class="stat-label">New This Month</div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">🛡️</div>
+          <div class="stat-number" id="adminUsers">12</div>
+          <div class="stat-label">Admin Users</div>
+        </div>
+      </div>
+      
+      <!-- Filters Section -->
+      <div class="filters-section">
+        <div class="filters-row">
+          <div class="filter-group">
+            <label class="filter-label">Search Users</label>
+            <input type="text" class="filter-input" id="searchUsers" placeholder="Search by name or email...">
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label">Role</label>
+            <select class="filter-select" id="roleFilter">
+              <option value="">All Roles</option>
+              <option value="citizen">Citizens</option>
+              <option value="admin">Admins</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label">Status</label>
+            <select class="filter-select" id="statusFilter">
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="suspended">Suspended</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label">Registration Date</label>
+            <input type="date" class="filter-input" id="dateFilter">
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label">&nbsp;</label>
+            <button class="btn btn-primary" id="applyFilters">
+              <i class="fas fa-search"></i>
+              Apply Filters
+            </button>
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label">&nbsp;</label>
+            <button class="btn btn-secondary" id="clearFilters">
+              <i class="fas fa-times"></i>
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Users Table -->
+      <div class="users-section">
+        <div class="section-header">
+          <h2 class="section-title">👥 All Users (<span id="totalCount">2,847</span>)</h2>
+          <button class="add-user-btn" id="addUserBtn">
+            <i class="fas fa-plus"></i>
+            Add New User
+          </button>
+        </div>
+        
+        <div class="table-container">
+          <table class="users-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Complaints</th>
+                <th>Joined</th>
+                <th>Last Activity</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <!-- Users will be loaded here -->
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="pagination" id="pagination">
+          <!-- Pagination buttons will be generated here -->
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Admin Users Management JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check admin authentication
+      if(localStorage.getItem("role") !== "admin" || !localStorage.getItem("token")) {
+        window.location.href = "admin-login.html";
+      }
+      
+      // Initialize users management
+      initializeUsersPage();
+      loadUsers();
+    });
+    
+    // Logout functionality
+    document.getElementById('logoutBtn').onclick = function(e){
+      e.preventDefault();
+      localStorage.clear();
+      window.location.href = "admin-login.html";
+    };
+    
+    let users = [];
+    let filteredUsers = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    
+    // Sample users data
+    const sampleUsers = [
+      {
+        id: "U001",
+        name: "Rajesh Kumar",
+        email: "rajesh.kumar@email.com",
+        role: "citizen",
+        status: "active",
+        complaints: 3,
+        joined: "2024-01-15",
+        lastActivity: "2024-01-20",
+        avatar: "RK"
+      },
+      {
+        id: "U002",
+        name: "Priya Sharma",
+        email: "priya.sharma@email.com",
+        role: "citizen",
+        status: "active",
+        complaints: 7,
+        joined: "2023-11-08",
+        lastActivity: "2024-01-19",
+        avatar: "PS"
+      },
+      {
+        id: "U003",
+        name: "Admin User",
+        email: "admin@rajgov.in",
+        role: "admin",
+        status: "active",
+        complaints: 0,
+        joined: "2023-01-01",
+        lastActivity: "2024-01-20",
+        avatar: "AU"
+      },
+      {
+        id: "U004",
+        name: "Amit Singh",
+        email: "amit.singh@email.com",
+        role: "citizen",
+        status: "inactive",
+        complaints: 1,
+        joined: "2023-12-20",
+        lastActivity: "2023-12-25",
+        avatar: "AS"
+      },
+      {
+        id: "U005",
+        name: "Sunita Devi",
+        email: "sunita.devi@email.com",
+        role: "citizen",
+        status: "suspended",
+        complaints: 15,
+        joined: "2023-08-12",
+        lastActivity: "2024-01-10",
+        avatar: "SD"
+      }
+    ];
+    
+    function initializeUsersPage() {
+      // Add event listeners
+      document.getElementById('searchUsers').addEventListener('input', applyFilters);
+      document.getElementById('roleFilter').addEventListener('change', applyFilters);
+      document.getElementById('statusFilter').addEventListener('change', applyFilters);
+      document.getElementById('dateFilter').addEventListener('change', applyFilters);
+      document.getElementById('applyFilters').addEventListener('click', applyFilters);
+      document.getElementById('clearFilters').addEventListener('click', clearFilters);
+      document.getElementById('addUserBtn').addEventListener('click', addNewUser);
+    }
+    
+    function loadUsers() {
+      // Simulate API call
+      setTimeout(() => {
+        users = [...sampleUsers];
+        // Generate more sample data
+        for (let i = 6; i <= 50; i++) {
+          const roles = ['citizen', 'admin'];
+          const statuses = ['active', 'inactive', 'suspended'];
+          const names = ['Rahul', 'Anjali', 'Vikash', 'Meera', 'Kiran', 'Deepak'];
+          const surnames = ['Sharma', 'Kumar', 'Singh', 'Devi', 'Gupta', 'Verma'];
+          
+          const firstName = names[Math.floor(Math.random() * names.length)];
+          const lastName = surnames[Math.floor(Math.random() * surnames.length)];
+          
+          users.push({
+            id: `U${String(i).padStart(3, '0')}`,
+            name: `${firstName} ${lastName}`,
+            email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@email.com`,
+            role: roles[Math.floor(Math.random() * roles.length)],
+            status: statuses[Math.floor(Math.random() * statuses.length)],
+            complaints: Math.floor(Math.random() * 20),
+            joined: new Date(2023, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1).toISOString().split('T')[0],
+            lastActivity: new Date(2024, 0, Math.floor(Math.random() * 20) + 1).toISOString().split('T')[0],
+            avatar: firstName.charAt(0) + lastName.charAt(0)
+          });
+        }
+        
+        applyFilters();
+        updateUserStats();
+      }, 500);
+    }
+    
+    function applyFilters() {
+      const searchTerm = document.getElementById('searchUsers').value.toLowerCase();
+      const roleFilter = document.getElementById('roleFilter').value;
+      const statusFilter = document.getElementById('statusFilter').value;
+      const dateFilter = document.getElementById('dateFilter').value;
+      
+      filteredUsers = users.filter(user => {
+        return (!searchTerm || 
+                user.name.toLowerCase().includes(searchTerm) ||
+                user.email.toLowerCase().includes(searchTerm)) &&
+               (!roleFilter || user.role === roleFilter) &&
+               (!statusFilter || user.status === statusFilter) &&
+               (!dateFilter || user.joined >= dateFilter);
+      });
+      
+      currentPage = 1;
+      renderUsers();
+      renderPagination();
+      updateTotalCount();
+    }
+    
+    function renderUsers() {
+      const tbody = document.getElementById('usersTableBody');
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const pageUsers = filteredUsers.slice(startIndex, endIndex);
+      
+      tbody.innerHTML = pageUsers.map(user => `
+        <tr>
+          <td>
+            <div class="user-info">
+              <div class="user-avatar">${user.avatar}</div>
+              <div class="user-details">
+                <div class="user-name">${user.name}</div>
+                <div class="user-email">${user.email}</div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="role-badge role-${user.role}">
+              ${user.role === 'admin' ? '🛡️ Admin' : '👤 Citizen'}
+            </span>
+          </td>
+          <td>
+            <span class="status-badge status-${user.status}">
+              ${user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+            </span>
+          </td>
+          <td>${user.complaints}</td>
+          <td>${formatDate(user.joined)}</td>
+          <td>${formatDate(user.lastActivity)}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="action-btn btn-view" onclick="viewUser('${user.id}')" title="View Details">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="action-btn btn-edit" onclick="editUser('${user.id}')" title="Edit User">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn btn-delete" onclick="deleteUser('${user.id}')" title="Delete User">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+    
+    function renderPagination() {
+      const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+      const pagination = document.getElementById('pagination');
+      
+      let paginationHTML = '';
+      
+      // Previous button
+      if (currentPage > 1) {
+        paginationHTML += `<button class="pagination-btn" onclick="changePage(${currentPage - 1})">
+          <i class="fas fa-chevron-left"></i>
+        </button>`;
+      }
+      
+      // Page numbers
+      for (let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) {
+        paginationHTML += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+      }
+      
+      // Next button
+      if (currentPage < totalPages) {
+        paginationHTML += `<button class="pagination-btn" onclick="changePage(${currentPage + 1})">
+          <i class="fas fa-chevron-right"></i>
+        </button>`;
+      }
+      
+      pagination.innerHTML = paginationHTML;
+    }
+    
+    function changePage(page) {
+      currentPage = page;
+      renderUsers();
+      renderPagination();
+    }
+    
+    function clearFilters() {
+      document.getElementById('searchUsers').value = '';
+      document.getElementById('roleFilter').value = '';
+      document.getElementById('statusFilter').value = '';
+      document.getElementById('dateFilter').value = '';
+      applyFilters();
+    }
+    
+    function updateUserStats() {
+      const totalUsers = users.length;
+      const activeUsers = users.filter(u => u.status === 'active').length;
+      const newUsers = users.filter(u => {
+        const joinedDate = new Date(u.joined);
+        const thisMonth = new Date();
+        thisMonth.setDate(1);
+        return joinedDate >= thisMonth;
+      }).length;
+      const adminUsers = users.filter(u => u.role === 'admin').length;
+      
+      // Animate counters
+      animateCounter('totalUsers', totalUsers);
+      animateCounter('activeUsers', activeUsers);
+      animateCounter('newUsers', newUsers);
+      animateCounter('adminUsers', adminUsers);
+    }
+    
+    function updateTotalCount() {
+      document.getElementById('totalCount').textContent = filteredUsers.length.toLocaleString();
+    }
+    
+    function animateCounter(id, target) {
+      const element = document.getElementById(id);
+      if (!element) return;
+      
+      const start = 0;
+      const duration = 1500;
+      const startTime = Date.now();
+      
+      function update() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const current = start + (target - start) * progress;
+        
+        element.textContent = Math.floor(current).toLocaleString();
+        
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+      
+      update();
+    }
+    
+    function formatDate(dateStr) {
+      return new Date(dateStr).toLocaleDateString('en-IN');
+    }
+    
+    function viewUser(id) {
+      const user = users.find(u => u.id === id);
+      if (user) {
+        alert(`View user details for: ${user.name}\nEmail: ${user.email}\nRole: ${user.role}\nStatus: ${user.status}`);
+      }
+    }
+    
+    function editUser(id) {
+      const user = users.find(u => u.id === id);
+      if (user) {
+        alert(`Edit user: ${user.name}\n\nEdit functionality would be implemented here with a proper form modal.`);
+      }
+    }
+    
+    function deleteUser(id) {
+      const user = users.find(u => u.id === id);
+      if (user && confirm(`Are you sure you want to delete user: ${user.name}?`)) {
+        const index = users.findIndex(u => u.id === id);
+        if (index > -1) {
+          users.splice(index, 1);
+          applyFilters();
+          updateUserStats();
+          alert('User deleted successfully!');
+        }
+      }
+    }
+    
+    function addNewUser() {
+      alert('Add New User functionality would open a form modal here.\n\nFeatures would include:\n- User registration form\n- Role assignment\n- Email verification\n- Password setup');
+    }
+  </script>
+</body>
+</html>
