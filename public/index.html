@@ -4,572 +4,1362 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rajasthan Seva Portal - Digital Governance Platform</title>
+  <meta name="description" content="Digital grievance portal for Rajasthan citizens to file complaints and track their status with government departments.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/modern-framework.css">
   <style>
-    /* Page Specific Styles */
-    .hero {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      position: relative;
-      overflow: hidden;
+    /* Global CSS Variables for Unexpected Theme */
+    :root {
+      --neon-cyan: #00ffff;
+      --neon-pink: #ff0080;
+      --neon-yellow: #ffff00;
+      --neon-green: #00ff80;
+      --deep-space: #0a0a0f;
+      --cosmic-purple: #1a0033;
+      --stellar-blue: #001a33;
+      --quantum-glow: rgba(0, 255, 255, 0.8);
+      --plasma-pink: rgba(255, 0, 128, 0.6);
+      --energy-yellow: rgba(255, 255, 0, 0.4);
+      --matrix-green: rgba(0, 255, 128, 0.3);
     }
-    
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-      pointer-events: none;
-    }
-    
-    .hero-content {
-      position: relative;
-      z-index: 1;
-    }
-    
-    .stats-grid {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: var(--radius-2xl);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .stat-item {
-      text-align: center;
-      padding: var(--space-6);
-    }
-    
-    .stat-number {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: var(--accent-gold);
-      display: block;
-      margin-bottom: var(--space-2);
-    }
-    
-    .stat-label {
-      color: rgba(255, 255, 255, 0.9);
-      font-weight: 500;
-    }
-    
-    .feature-icon {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto var(--space-4);
-      background: var(--gradient-primary);
-      border-radius: var(--radius-2xl);
+
+    /* Clean Cyberpunk Hero */
+    .hero-3d {
+      min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 2rem;
-      color: white;
+      position: relative;
+      background: 
+        linear-gradient(135deg, var(--deep-space) 0%, var(--cosmic-purple) 50%, var(--stellar-blue) 100%),
+        radial-gradient(circle at 30% 40%, var(--quantum-glow) 0%, transparent 50%),
+        radial-gradient(circle at 70% 60%, var(--plasma-pink) 0%, transparent 40%);
+      overflow: hidden;
     }
-    
-    .notification-dot {
+
+    /* Simple Grid Overlay */
+    .simple-grid {
       position: absolute;
-      top: -2px;
-      right: -2px;
-      width: 8px;
-      height: 8px;
-      background: var(--error);
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.8; transform: scale(1.1); }
-    }
-    
-    .mobile-menu {
-      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100vh;
-      background: rgba(255, 255, 255, 0.98);
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 100px 100px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    /* Simple Floating Particles */
+    .floating-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--neon-cyan);
+      border-radius: 50%;
+      animation: float 8s linear infinite;
+      box-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    .particle:nth-child(2n) {
+      background: var(--neon-pink);
+      box-shadow: 0 0 10px var(--neon-pink);
+      animation-delay: -2s;
+    }
+
+    .particle:nth-child(3n) {
+      background: var(--neon-yellow);
+      box-shadow: 0 0 10px var(--neon-yellow);
+      animation-delay: -4s;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0px);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) translateX(50px);
+        opacity: 0;
+      }
+    }
+    
+    .hero-content-3d {
+      text-align: center;
+      color: white;
+      z-index: 20;
+      position: relative;
+      animation: fadeInUp 1.2s ease-out both;
+    }
+    
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+    }
+    
+    .hero-badge-3d {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      background: linear-gradient(90deg, var(--quantum-glow), var(--plasma-pink));
+      backdrop-filter: blur(25px);
+      padding: var(--space-3) var(--space-8);
+      font-size: var(--text-sm);
+      font-weight: 700;
+      margin-bottom: var(--space-16);
+      border: 2px solid var(--neon-cyan);
+      box-shadow: 
+        0 0 30px var(--neon-cyan),
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      animation: badgeFloat 4s ease-in-out infinite, neonPulse 3s ease-in-out infinite;
+      transform-style: preserve-3d;
+      color: #000;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    }
+
+    @keyframes neonPulse {
+      0%, 100% {
+        box-shadow: 
+          0 0 30px var(--neon-cyan),
+          0 8px 32px rgba(0, 0, 0, 0.5);
+      }
+      50% {
+        box-shadow: 
+          0 0 50px var(--neon-pink),
+          0 12px 40px rgba(255, 0, 128, 0.3);
+      }
+    }
+    
+    @keyframes badgeFloat {
+      0%, 100% { 
+        transform: translateY(0px) rotateX(0deg);
+        box-shadow: 
+          0 8px 32px rgba(0, 0, 0, 0.3),
+          0 0 40px rgba(255, 255, 255, 0.3);
+      }
+      50% { 
+        transform: translateY(-10px) rotateX(5deg);
+        box-shadow: 
+          0 20px 40px rgba(0, 0, 0, 0.4),
+          0 0 60px rgba(255, 255, 255, 0.6);
+      }
+    }
+    
+    .hero-title-3d {
+      font-size: clamp(4rem, 12vw, 10rem);
+      font-weight: 900;
+      line-height: 0.9;
+      margin-bottom: var(--space-8);
+      font-family: 'Orbitron', var(--font-display);
+      background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink), var(--neon-yellow), var(--neon-green));
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 
+        0 0 30px var(--neon-cyan),
+        0 0 60px var(--neon-pink),
+        0 10px 40px rgba(0, 0, 0, 0.8);
+      animation: titleSpectral 6s ease-in-out infinite, neonShift 8s ease-in-out infinite;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      position: relative;
+    }
+
+    @keyframes neonShift {
+      0%, 100% {
+        background-position: 0% 50%;
+        filter: hue-rotate(0deg);
+      }
+      25% {
+        background-position: 100% 50%;
+        filter: hue-rotate(90deg);
+      }
+      50% {
+        background-position: 100% 100%;
+        filter: hue-rotate(180deg);
+      }
+      75% {
+        background-position: 0% 100%;
+        filter: hue-rotate(270deg);
+      }
+    }
+    
+    @keyframes titleSpectral {
+      0%, 100% { 
+        transform: translateY(0px) rotateX(0deg);
+        text-shadow: 
+          0 0 10px rgba(255, 255, 255, 0.5),
+          0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+      25% {
+        transform: translateY(-5px) rotateX(2deg);
+        text-shadow: 
+          0 0 20px rgba(255, 255, 255, 0.8),
+          0 15px 40px rgba(102, 126, 234, 0.6);
+      }
+      50% { 
+        transform: translateY(-10px) rotateX(0deg);
+        text-shadow: 
+          0 0 30px rgba(255, 255, 255, 1),
+          0 20px 50px rgba(118, 75, 162, 0.7);
+      }
+      75% {
+        transform: translateY(-5px) rotateX(-2deg);
+        text-shadow: 
+          0 0 20px rgba(255, 255, 255, 0.8),
+          0 15px 40px rgba(240, 147, 251, 0.6);
+      }
+    }
+    
+    .hero-subtitle-3d {
+      font-size: var(--text-2xl);
+      margin-bottom: var(--space-20);
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
+      font-weight: 300;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.9);
+      text-shadow: 
+        0 0 20px var(--neon-cyan),
+        0 4px 30px rgba(0, 0, 0, 0.8);
+      animation: subtitleGlow 1.5s ease-out 0.8s both, textGlow 4s ease-in-out infinite;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    @keyframes textGlow {
+      0%, 100% {
+        text-shadow: 
+          0 0 20px var(--neon-cyan),
+          0 4px 30px rgba(0, 0, 0, 0.8);
+      }
+      50% {
+        text-shadow: 
+          0 0 30px var(--neon-pink),
+          0 0 50px var(--neon-yellow),
+          0 4px 30px rgba(0, 0, 0, 0.8);
+      }
+    }
+    
+    @keyframes subtitleGlow {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) translateZ(-50px);
+        text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+      }
+      100% {
+        opacity: 0.95;
+        transform: translateY(0px) translateZ(0px);
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      }
+    }
+    
+    .hero-actions-3d {
+      display: flex;
+      gap: var(--space-8);
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: actionsRise 1.8s cubic-bezier(0.4, 0, 0.2, 1) 1.2s both;
+      perspective: 1000px;
+      margin-bottom: var(--space-20);
+    }
+    
+    @keyframes actionsRise {
+      0% {
+        opacity: 0;
+        transform: translateY(60px) translateZ(-100px) rotateX(45deg);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0px) translateZ(0px) rotateX(0deg);
+      }
+    }
+    
+    .cta-3d {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-6) var(--space-12);
+      border-radius: 0;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: var(--text-xl);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+    
+    .cta-3d::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+      transition: left 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1;
+    }
+    
+    .cta-3d::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      transition: all 0.4s ease;
+      z-index: 0;
+    }
+    
+    .cta-3d:hover::before {
+      left: 100%;
+    }
+    
+    .cta-3d:hover::after {
+      width: 300px;
+      height: 300px;
+    }
+    
+    .cta-3d span, .cta-3d i {
+      position: relative;
+      z-index: 2;
+    }
+    
+    .cta-primary-3d {
+      background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-pink) 50%, var(--neon-yellow) 100%);
+      background-size: 200% 200%;
+      color: #000;
+      border: 3px solid var(--neon-cyan);
+      font-weight: 900;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      box-shadow: 
+        0 0 30px var(--neon-cyan),
+        0 15px 35px rgba(0, 0, 0, 0.6),
+        0 5px 15px var(--quantum-glow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      animation: ctaShimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes ctaShimmer {
+      0%, 100% {
+        background-position: 0% 50%;
+        box-shadow: 
+          0 0 30px var(--neon-cyan),
+          0 15px 35px rgba(0, 0, 0, 0.6);
+      }
+      50% {
+        background-position: 100% 50%;
+        box-shadow: 
+          0 0 40px var(--neon-pink),
+          0 20px 40px rgba(255, 0, 128, 0.4);
+      }
+    }
+    
+    .cta-primary-3d:hover {
+      transform: translateY(-12px) translateZ(30px) rotateX(-5deg);
+      box-shadow: 
+        0 35px 70px rgba(0, 0, 0, 0.6),
+        0 15px 30px rgba(102, 126, 234, 1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    
+    .cta-secondary-3d {
+      background: linear-gradient(135deg, transparent 0%, var(--matrix-green) 50%, transparent 100%);
+      color: var(--neon-green);
+      border: 3px solid var(--neon-green);
+      backdrop-filter: blur(25px);
+      font-weight: 900;
+      text-shadow: 0 0 15px var(--neon-green);
+      box-shadow: 
+        0 0 25px var(--neon-green),
+        0 15px 35px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(0, 255, 128, 0.3);
+      animation: ctaMatrix 2s ease-in-out infinite;
+    }
+
+    @keyframes ctaMatrix {
+      0%, 100% {
+        border-color: var(--neon-green);
+        color: var(--neon-green);
+        box-shadow: 
+          0 0 25px var(--neon-green),
+          0 15px 35px rgba(0, 0, 0, 0.6);
+      }
+      50% {
+        border-color: var(--neon-cyan);
+        color: var(--neon-cyan);
+        box-shadow: 
+          0 0 35px var(--neon-cyan),
+          0 20px 40px rgba(0, 255, 255, 0.3);
+      }
+    }
+    
+    .cta-secondary-3d:hover {
+      background: rgba(240, 147, 251, 0.25);
+      transform: translateY(-10px) translateZ(25px) rotateX(-3deg);
+      box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.6),
+        0 10px 20px rgba(240, 147, 251, 0.6),
+        inset 0 1px 0 rgba(240, 147, 251, 0.6);
+    }
+    
+    /* Service Links Section */
+    .services-links {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-16);
+      flex-wrap: wrap;
+      animation: servicesFloat 2s ease-out 1.8s both;
+    }
+    
+    @keyframes servicesFloat {
+      0% {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+    }
+    
+    .service-link-3d {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: rgba(255, 255, 255, 0.8);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    
+    .service-icon-minimal {
+      width: 80px;
+      height: 80px;
+      background: rgba(102, 126, 234, 0.2);
       backdrop-filter: blur(20px);
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
-      z-index: 1001;
+      border-radius: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-3xl);
+      margin-bottom: var(--space-4);
+      border: 2px solid rgba(102, 126, 234, 0.3);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
     
-    .mobile-menu.active {
-      transform: translateX(0);
+    .service-link-3d:hover .service-icon-minimal {
+      transform: translateY(-10px) rotateX(15deg);
+      background: rgba(102, 126, 234, 0.4);
+      border-color: rgba(102, 126, 234, 0.8);
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
     }
     
-    .mobile-menu-content {
-      padding: var(--space-20) var(--space-6) var(--space-6);
+    .service-title-minimal {
+      font-size: var(--text-lg);
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: var(--space-2);
+      transition: all 0.3s ease;
     }
     
-    .mobile-nav-links {
-      list-style: none;
+    .service-subtitle {
+      font-size: var(--text-sm);
+      opacity: 0.7;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .service-link-3d:hover {
+      color: white;
+      transform: translateY(-5px);
+    }
+    
+    .service-link-3d:hover .service-subtitle {
+      opacity: 1;
+    }
+    
+    /* Minimal Footer */
+    .footer-minimal {
+      background: var(--gray-900);
+      color: white;
+      padding: var(--space-16) 0 var(--space-8);
+      text-align: center;
+    }
+    
+    .footer-content-minimal {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .footer-brand-minimal {
+      font-size: var(--text-2xl);
+      font-weight: 800;
+      margin-bottom: var(--space-4);
+      background: var(--primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .footer-links-minimal {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-8);
+      margin: var(--space-8) 0;
+      flex-wrap: wrap;
+    }
+    
+    .footer-links-minimal a {
+      color: var(--gray-400);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .footer-links-minimal a:hover {
+      color: white;
+    }
+    
+    .chatbot-fab {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 70px;
+      height: 70px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: var(--text-2xl);
+      box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: var(--z-fixed);
+      animation: pulse 3s ease-in-out infinite;
+    }
+    
+    .chatbot-fab:hover {
+      transform: scale(1.1) translateY(-5px);
+      box-shadow: 0 25px 50px rgba(102, 126, 234, 0.6);
+    }
+
+    /* Additional Sections Styling */
+    .stats-section {
+      padding: var(--space-24) 0;
+      background: var(--gray-50);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-8);
+    }
+
+    .stat-card {
+      background: white;
+      padding: var(--space-8);
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s ease;
+      border-left: 4px solid var(--primary-solid);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--primary);
+      margin: 0 auto var(--space-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-2xl);
+      color: white;
+    }
+
+    .stat-number {
+      font-size: var(--text-4xl);
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: var(--space-2);
+    }
+
+    .stat-label {
+      color: var(--gray-600);
+      font-weight: 600;
+    }
+
+    .services-section {
+      padding: var(--space-24) 0;
+      background: white;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--space-16);
+    }
+
+    .section-header h2 {
+      font-size: var(--text-4xl);
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: var(--space-4);
+    }
+
+    .section-header p {
+      font-size: var(--text-xl);
+      color: var(--gray-600);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: var(--space-8);
+    }
+
+    .service-card {
+      background: white;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+    }
+
+    .service-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .service-content {
+      padding: var(--space-6);
+    }
+
+    .service-content h3 {
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: var(--space-3);
+    }
+
+    .service-content p {
+      color: var(--gray-600);
+      margin-bottom: var(--space-4);
+      line-height: 1.6;
+    }
+
+    .service-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--primary-solid);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .service-btn:hover {
+      transform: translateX(5px);
+    }
+
+    .features-section {
+      padding: var(--space-24) 0;
+      background: var(--gray-50);
+    }
+
+    .features-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-16);
+      align-items: center;
+    }
+
+    .features-text h2 {
+      font-size: var(--text-4xl);
+      font-weight: 800;
+      color: var(--gray-900);
       margin-bottom: var(--space-8);
     }
-    
-    .mobile-nav-link {
-      display: block;
-      padding: var(--space-4) 0;
-      color: var(--gray-800);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 1.125rem;
-      border-bottom: 1px solid var(--gray-200);
+
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
     }
-    
-    .mobile-nav-link:hover {
-      color: var(--primary-blue);
+
+    .feature-item {
+      display: flex;
+      gap: var(--space-4);
+      align-items: flex-start;
     }
-    
-    .mobile-close {
-      position: absolute;
-      top: var(--space-6);
-      right: var(--space-6);
-      background: none;
-      border: none;
-      font-size: 1.5rem;
+
+    .feature-item i {
+      width: 50px;
+      height: 50px;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xl);
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .feature-item h4 {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: var(--space-2);
+    }
+
+    .feature-item p {
       color: var(--gray-600);
-      cursor: pointer;
+      line-height: 1.6;
+    }
+
+    .features-image img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .departments-section {
+      padding: var(--space-24) 0;
+      background: white;
+    }
+
+    .departments-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-6);
+    }
+
+    .dept-card {
+      background: white;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .dept-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(102, 126, 234, 0.15);
+    }
+
+    .dept-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+
+    .dept-card h4 {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--gray-900);
+      margin: var(--space-4) var(--space-4) var(--space-2);
+    }
+
+    .dept-card p {
+      color: var(--gray-600);
+      font-size: var(--text-sm);
+      margin: 0 var(--space-4) var(--space-4);
+      line-height: 1.5;
+    }
+
+    /* Dark theme styles */
+    [data-theme="dark"] .stats-section {
+      background: var(--gray-800);
+    }
+
+    [data-theme="dark"] .stat-card {
+      background: var(--gray-700);
+      border-left-color: var(--primary-400);
+    }
+
+    [data-theme="dark"] .stat-number {
+      color: white;
+    }
+
+    [data-theme="dark"] .stat-label {
+      color: var(--gray-300);
+    }
+
+    [data-theme="dark"] .services-section {
+      background: var(--gray-900);
+    }
+
+    [data-theme="dark"] .service-card {
+      background: var(--gray-800);
+    }
+
+    [data-theme="dark"] .service-content h3 {
+      color: white;
+    }
+
+    [data-theme="dark"] .service-content p {
+      color: var(--gray-300);
+    }
+
+    [data-theme="dark"] .features-section {
+      background: var(--gray-800);
+    }
+
+    [data-theme="dark"] .features-text h2 {
+      color: white;
+    }
+
+    [data-theme="dark"] .feature-item h4 {
+      color: white;
+    }
+
+    [data-theme="dark"] .feature-item p {
+      color: var(--gray-300);
+    }
+
+    [data-theme="dark"] .departments-section {
+      background: var(--gray-900);
+    }
+
+    [data-theme="dark"] .dept-card {
+      background: var(--gray-800);
+    }
+
+    [data-theme="dark"] .dept-card h4 {
+      color: white;
+    }
+
+    [data-theme="dark"] .dept-card p {
+      color: var(--gray-300);
+    }
+
+    [data-theme="dark"] .section-header h2 {
+      color: white;
+    }
+
+    [data-theme="dark"] .section-header p {
+      color: var(--gray-300);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .features-content {
+        grid-template-columns: 1fr;
+        gap: var(--space-8);
+      }
+      
+      .hero-title-3d {
+        font-size: clamp(2rem, 8vw, 4rem);
+      }
+      
+      .hero-actions-3d {
+        flex-direction: column;
+        gap: var(--space-4);
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <nav class="navbar">
-    <div class="container nav-content">
-      <a href="index.html" class="nav-logo">
-        <img src="https://images.unsplash.com/photo-1594736797933-d0801ba2fe65?w=40&h=40&fit=crop&crop=center" alt="Rajasthan Government">
-        <span>Rajasthan Seva</span>
+  <!-- Modern Navigation -->
+  <nav class="navbar-modern" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-brand-icon">
+          <i class="fas fa-landmark"></i>
+        </div>
+        <span>Rajasthan Seva Portal</span>
       </a>
       
-      <ul class="nav-links">
-        <li><a href="index.html" class="nav-link active">Home</a></li>
-        <li><a href="complaint.html" class="nav-link">File Complaint</a></li>
-        <li><a href="status.html" class="nav-link">Track Status</a></li>
-        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
-        <li><a href="#about" class="nav-link">About</a></li>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Home</a></li>
+        <li><a href="complaint.html" class="nav-link"><i class="fas fa-plus-circle"></i> File Complaint</a></li>
+        <li><a href="status.html" class="nav-link"><i class="fas fa-search"></i> Track Status</a></li>
+        <li><a href="dashboard.html" class="nav-link"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+        <li><a href="#services" class="nav-link"><i class="fas fa-cogs"></i> Services</a></li>
       </ul>
       
-      <div class="nav-actions">
-        <button class="btn btn-ghost relative" id="notifications">
-          <i class="fas fa-bell"></i>
-          <div class="notification-dot"></div>
+      <div class="flex items-center" style="gap: var(--space-4);">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" style="background: none; border: none; color: var(--gray-600); font-size: var(--text-lg); cursor: pointer; padding: var(--space-2); border-radius: var(--radius); transition: all 0.3s ease;">
+          <i class="fas fa-moon" id="themeIcon"></i>
         </button>
         <a href="login.html" class="btn btn-outline">Login</a>
-        <a href="admin-login.html" class="btn btn-primary">Admin</a>
+        <a href="admin-login.html" class="btn btn-primary">Admin Portal</a>
       </div>
       
-      <div class="mobile-toggle" id="mobileToggle">
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu" style="display: none;">
         <span></span>
         <span></span>
         <span></span>
-      </div>
+      </button>
     </div>
   </nav>
 
-  <!-- Mobile Menu -->
-  <div class="mobile-menu" id="mobileMenu">
-    <button class="mobile-close" id="mobileClose">
-      <i class="fas fa-times"></i>
-    </button>
-    <div class="mobile-menu-content">
-      <ul class="mobile-nav-links">
-        <li><a href="index.html" class="mobile-nav-link">Home</a></li>
-        <li><a href="complaint.html" class="mobile-nav-link">File Complaint</a></li>
-        <li><a href="status.html" class="mobile-nav-link">Track Status</a></li>
-        <li><a href="dashboard.html" class="mobile-nav-link">Dashboard</a></li>
-        <li><a href="#about" class="mobile-nav-link">About</a></li>
-      </ul>
-      <div class="flex flex-col gap-3">
-        <a href="login.html" class="btn btn-outline w-full">Login</a>
-        <a href="admin-login.html" class="btn btn-primary w-full">Admin Portal</a>
-      </div>
-    </div>
-  </div>
 
-  <!-- Hero Section -->
-  <section class="hero py-20">
-    <div class="container hero-content">
-      <div class="text-center mb-12">
-        <div class="inline-flex items-center gap-2 bg-white bg-opacity-20 px-4 py-2 rounded-full mb-6">
-          <i class="fas fa-landmark"></i>
-          <span class="font-medium">Government of Rajasthan</span>
+  <!-- Clean Hero Section -->
+  <section class="hero-3d" id="hero">
+    <!-- Simple Grid -->
+    <div class="simple-grid"></div>
+    
+    <!-- Floating Particles -->
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="hero-content-3d">
+        <!-- Badge -->
+        <div class="hero-badge-3d">
+          <i class="fas fa-microchip"></i>
+          <span>RAJASTHAN CYBER GOVERNANCE • MATRIX v2.0</span>
         </div>
         
-        <h1 class="text-5xl md:text-6xl font-black mb-6">
-          Digital Grievance
-          <span class="block text-yellow-300">Portal</span>
+        <!-- Main Title -->
+        <h1 class="hero-title-3d">
+          <span style="display: block;">RAJASTHAN</span>
+          <span style="font-size: 0.7em; letter-spacing: 3px;">QUANTUM.SEVA</span>
+          <span style="font-size: 0.4em; display: block; margin-top: 10px; letter-spacing: 8px;">••• NEURAL NETWORK ACTIVATED •••</span>
         </h1>
         
-        <p class="text-xl text-white text-opacity-90 max-w-2xl mx-auto mb-8">
-          Experience transparent, efficient governance with our modern digital platform. 
-          Submit complaints, track progress, and engage with government services seamlessly.
+        <!-- Subtitle -->
+        <p class="hero-subtitle-3d">
+          🚀 NEXT-GENERATION CYBERPUNK GOVERNANCE PORTAL 🚀<br>
+          Quantum-powered complaint processing • Neural network status tracking • Holographic department interfaces • AI-driven resolution algorithms
         </p>
         
-        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-          <a href="complaint.html" class="btn btn-secondary btn-lg">
+        <!-- CTA Buttons -->
+        <div class="hero-actions-3d">
+          <a href="complaint.html" class="cta-3d cta-primary-3d">
             <i class="fas fa-plus"></i>
-            File New Complaint
+            <span>File Complaint</span>
           </a>
-          <a href="status.html" class="btn btn-outline btn-lg text-white border-white hover:bg-white hover:text-blue-600">
+          <a href="status.html" class="cta-3d cta-secondary-3d">
             <i class="fas fa-search"></i>
-            Track Status
+            <span>Track Status</span>
+          </a>
+        </div>
+    </div>
+  </section>
+
+        <!-- Service Links -->
+        <div class="services-links">
+          <a href="complaint.html" class="service-link-3d">
+            <div class="service-icon-minimal">
+              <i class="fas fa-file-plus"></i>
+            </div>
+            <div class="service-title-minimal">File Complaint</div>
+            <div class="service-subtitle">Submit & Track</div>
+          </a>
+          
+          <a href="status.html" class="service-link-3d">
+            <div class="service-icon-minimal">
+              <i class="fas fa-search-location"></i>
+            </div>
+            <div class="service-title-minimal">Track Status</div>
+            <div class="service-subtitle">Real-time Updates</div>
+          </a>
+          
+          <a href="dashboard.html" class="service-link-3d">
+            <div class="service-icon-minimal">
+              <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="service-title-minimal">Dashboard</div>
+            <div class="service-subtitle">Analytics & Reports</div>
           </a>
         </div>
       </div>
-      
-      <!-- Statistics -->
-      <div class="stats-grid grid grid-cols-2 md:grid-cols-4 gap-0">
-        <div class="stat-item">
-          <div class="stat-number" id="totalComplaints">125,486</div>
+    </div>
+  </section>
+
+  <!-- Statistics Section -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-file-alt"></i>
+          </div>
+          <div class="stat-number" data-count="15234">0</div>
           <div class="stat-label">Total Complaints</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-number" id="resolvedComplaints">98,742</div>
-          <div class="stat-label">Resolved</div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="stat-number" data-count="12890">0</div>
+          <div class="stat-label">Resolved Cases</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-number" id="avgResolution">4.2 Days</div>
-          <div class="stat-label">Avg Resolution</div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="stat-number" data-count="2344">0</div>
+          <div class="stat-label">Pending Cases</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-number" id="satisfaction">96%</div>
-          <div class="stat-label">Satisfaction Rate</div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="stat-number" data-count="8756">0</div>
+          <div class="stat-label">Active Users</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="services-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Our Services</h2>
+        <p>Comprehensive digital governance solutions for citizens of Rajasthan</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=200&fit=crop" alt="File Complaint" class="service-image">
+          <div class="service-content">
+            <h3>File Complaint</h3>
+            <p>Submit your grievances quickly with our intelligent form system</p>
+            <a href="complaint.html" class="service-btn">Get Started</a>
+          </div>
+        </div>
+        <div class="service-card">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop" alt="Track Status" class="service-image">
+          <div class="service-content">
+            <h3>Track Progress</h3>
+            <p>Monitor your complaint's journey in real-time with detailed updates</p>
+            <a href="status.html" class="service-btn">Track Now</a>
+          </div>
+        </div>
+        <div class="service-card">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop" alt="Dashboard" class="service-image">
+          <div class="service-content">
+            <h3>Analytics Dashboard</h3>
+            <p>Access comprehensive insights and transparent reporting</p>
+            <a href="dashboard.html" class="service-btn">View Dashboard</a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Features Section -->
-  <section class="py-20 bg-gray-50">
+  <section class="features-section">
     <div class="container">
-      <div class="text-center mb-12">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">
-          Why Choose Our Platform?
-        </h2>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-          Built with modern technology to provide citizens with the best possible experience
-        </p>
-      </div>
-      
-      <div class="grid grid-cols-auto gap-8">
-        <div class="card text-center hover:scale-105">
-          <div class="card-body">
-            <div class="feature-icon">
-              <i class="fas fa-map-marker-alt"></i>
-            </div>
-            <h3 class="text-xl font-bold mb-3">GPS Integration</h3>
-            <p class="text-gray-600">
-              Precise location tracking for accurate complaint reporting and faster resolution
-            </p>
-          </div>
-        </div>
-        
-        <div class="card text-center hover:scale-105">
-          <div class="card-body">
-            <div class="feature-icon">
+      <div class="features-content">
+        <div class="features-text">
+          <h2>Why Choose Rajasthan Seva Portal?</h2>
+          <div class="feature-list">
+            <div class="feature-item">
               <i class="fas fa-shield-alt"></i>
+              <div>
+                <h4>Secure & Transparent</h4>
+                <p>End-to-end encryption and transparent process tracking</p>
+              </div>
             </div>
-            <h3 class="text-xl font-bold mb-3">Secure Authentication</h3>
-            <p class="text-gray-600">
-              OTP-based verification ensures secure and authentic complaint submissions
-            </p>
-          </div>
-        </div>
-        
-        <div class="card text-center hover:scale-105">
-          <div class="card-body">
-            <div class="feature-icon">
-              <i class="fas fa-bell"></i>
+            <div class="feature-item">
+              <i class="fas fa-clock"></i>
+              <div>
+                <h4>Quick Resolution</h4>
+                <p>Automated routing and priority-based complaint handling</p>
+              </div>
             </div>
-            <h3 class="text-xl font-bold mb-3">Real-time Updates</h3>
-            <p class="text-gray-600">
-              Get instant notifications via SMS and email about your complaint status
-            </p>
-          </div>
-        </div>
-        
-        <div class="card text-center hover:scale-105">
-          <div class="card-body">
-            <div class="feature-icon">
+            <div class="feature-item">
+              <i class="fas fa-mobile-alt"></i>
+              <div>
+                <h4>Mobile Friendly</h4>
+                <p>Access from anywhere, anytime on any device</p>
+              </div>
+            </div>
+            <div class="feature-item">
               <i class="fas fa-chart-line"></i>
+              <div>
+                <h4>Real-time Analytics</h4>
+                <p>Live tracking and comprehensive reporting dashboard</p>
+              </div>
             </div>
-            <h3 class="text-xl font-bold mb-3">Analytics Dashboard</h3>
-            <p class="text-gray-600">
-              Comprehensive insights and performance metrics for transparent governance
-            </p>
           </div>
+        </div>
+        <div class="features-image">
+          <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop" alt="Dashboard Analytics">
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Quick Actions -->
-  <section class="py-20">
+  <!-- Departments Section -->
+  <section class="departments-section">
     <div class="container">
-      <div class="text-center mb-12">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">
-          Quick Actions
-        </h2>
-        <p class="text-xl text-gray-600">
-          Access the most used features with a single click
-        </p>
+      <div class="section-header">
+        <h2>Government Departments</h2>
+        <p>Connect with various government departments for your complaints</p>
       </div>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <a href="complaint.html" class="card hover:scale-105 cursor-pointer group">
-          <div class="card-body text-center">
-            <div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center text-white text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">
-              <i class="fas fa-plus"></i>
-            </div>
-            <h3 class="font-bold text-lg mb-2">New Complaint</h3>
-            <p class="text-gray-600 text-sm">Submit a new grievance with location and photos</p>
-          </div>
-        </a>
-        
-        <a href="status.html" class="card hover:scale-105 cursor-pointer group">
-          <div class="card-body text-center">
-            <div class="w-16 h-16 bg-secondary rounded-xl flex items-center justify-center text-white text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">
-              <i class="fas fa-search"></i>
-            </div>
-            <h3 class="font-bold text-lg mb-2">Track Status</h3>
-            <p class="text-gray-600 text-sm">Check the progress of your complaints</p>
-          </div>
-        </a>
-        
-        <a href="dashboard.html" class="card hover:scale-105 cursor-pointer group">
-          <div class="card-body text-center">
-            <div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center text-white text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">
-              <i class="fas fa-chart-bar"></i>
-            </div>
-            <h3 class="font-bold text-lg mb-2">Dashboard</h3>
-            <p class="text-gray-600 text-sm">View analytics and complaint history</p>
-          </div>
-        </a>
-        
-        <a href="#help" class="card hover:scale-105 cursor-pointer group">
-          <div class="card-body text-center">
-            <div class="w-16 h-16 bg-secondary rounded-xl flex items-center justify-center text-white text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">
-              <i class="fas fa-question-circle"></i>
-            </div>
-            <h3 class="font-bold text-lg mb-2">Help Center</h3>
-            <p class="text-gray-600 text-sm">Find answers to common questions</p>
-          </div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Department Categories -->
-  <section class="py-20 bg-gray-50">
-    <div class="container">
-      <div class="text-center mb-12">
-        <h2 class="text-4xl font-bold text-gray-900 mb-4">
-          Department Categories
-        </h2>
-        <p class="text-xl text-gray-600">
-          Select the appropriate department for your complaint
-        </p>
-      </div>
-      
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <div class="card cursor-pointer hover:scale-105">
-          <div class="card-body text-center p-4">
-            <i class="fas fa-road text-3xl text-primary mb-3"></i>
-            <h4 class="font-semibold text-sm">Roads & Transport</h4>
-          </div>
+      <div class="departments-grid">
+        <div class="dept-card">
+          <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=300&h=200&fit=crop" alt="Public Works">
+          <h4>Public Works Department</h4>
+          <p>Road construction, maintenance, and infrastructure issues</p>
         </div>
-        
-        <div class="card cursor-pointer hover:scale-105">
-          <div class="card-body text-center p-4">
-            <i class="fas fa-bolt text-3xl text-primary mb-3"></i>
-            <h4 class="font-semibold text-sm">Electricity</h4>
-          </div>
+        <div class="dept-card">
+          <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=300&h=200&fit=crop" alt="Health">
+          <h4>Health Department</h4>
+          <p>Healthcare services, hospital facilities, and medical complaints</p>
         </div>
-        
-        <div class="card cursor-pointer hover:scale-105">
-          <div class="card-body text-center p-4">
-            <i class="fas fa-tint text-3xl text-primary mb-3"></i>
-            <h4 class="font-semibold text-sm">Water Supply</h4>
-          </div>
+        <div class="dept-card">
+          <img src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=300&h=200&fit=crop" alt="Education">
+          <h4>Education Department</h4>
+          <p>School facilities, teacher issues, and educational concerns</p>
         </div>
-        
-        <div class="card cursor-pointer hover:scale-105">
-          <div class="card-body text-center p-4">
-            <i class="fas fa-graduation-cap text-3xl text-primary mb-3"></i>
-            <h4 class="font-semibold text-sm">Education</h4>
-          </div>
+        <div class="dept-card">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop" alt="Water">
+          <h4>Water Resources</h4>
+          <p>Water supply, drainage, and irrigation related complaints</p>
         </div>
-        
-        <div class="card cursor-pointer hover:scale-105">
-          <div class="card-body text-center p-4">
-            <i class="fas fa-heartbeat text-3xl text-primary mb-3"></i>
-            <h4 class="font-semibold text-sm">Healthcare</h4>
-          </div>
+        <div class="dept-card">
+          <img src="https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?w=300&h=200&fit=crop" alt="Police">
+          <h4>Police Department</h4>
+          <p>Law and order, traffic, and public safety issues</p>
         </div>
-        
-        <div class="card cursor-pointer hover:scale-105">
-          <div class="card-body text-center p-4">
-            <i class="fas fa-shield-alt text-3xl text-primary mb-3"></i>
-            <h4 class="font-semibold text-sm">Police</h4>
-          </div>
-        </div>
-        
-        <div class="card cursor-pointer hover:scale-105">
-          <div class="card-body text-center p-4">
-            <i class="fas fa-file-alt text-3xl text-primary mb-3"></i>
-            <h4 class="font-semibold text-sm">Revenue</h4>
-          </div>
-        </div>
-        
-        <div class="card cursor-pointer hover:scale-105">
-          <div class="card-body text-center p-4">
-            <i class="fas fa-leaf text-3xl text-primary mb-3"></i>
-            <h4 class="font-semibold text-sm">Environment</h4>
-          </div>
-        </div>
-        
-        <div class="card cursor-pointer hover:scale-105">
-          <div class="card-body text-center p-4">
-            <i class="fas fa-building text-3xl text-primary mb-3"></i>
-            <h4 class="font-semibold text-sm">Urban Development</h4>
-          </div>
-        </div>
-        
-        <div class="card cursor-pointer hover:scale-105">
-          <div class="card-body text-center p-4">
-            <i class="fas fa-ellipsis-h text-3xl text-primary mb-3"></i>
-            <h4 class="font-semibold text-sm">Others</h4>
-          </div>
+        <div class="dept-card">
+          <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&h=200&fit=crop" alt="Urban">
+          <h4>Urban Development</h4>
+          <p>City planning, municipal services, and urban infrastructure</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-12">
+
+  <!-- AI Chatbot FAB -->
+  <div class="chatbot-fab" id="chatbotFab" title="AI Assistant">
+    <i class="fas fa-robot"></i>
+  </div>
+
+  <!-- Minimal Footer -->
+  <footer class="footer-minimal">
     <div class="container">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div>
-          <div class="flex items-center gap-3 mb-4">
-            <img src="https://images.unsplash.com/photo-1594736797933-d0801ba2fe65?w=40&h=40&fit=crop&crop=center" alt="Rajasthan" class="rounded-lg">
-            <span class="font-bold text-xl">Rajasthan Seva</span>
-          </div>
-          <p class="text-gray-400">
-            Digital governance platform for the citizens of Rajasthan.
-          </p>
+      <div class="footer-content-minimal">
+        <div class="footer-brand-minimal">
+          Rajasthan Seva Portal
+        </div>
+        <p class="text-gray-400 mb-8">Empowering citizens through digital governance</p>
+        
+        <div class="footer-links-minimal">
+          <a href="complaint.html">File Complaint</a>
+          <a href="status.html">Track Status</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="#contact">Contact</a>
+          <a href="#privacy">Privacy</a>
         </div>
         
-        <div>
-          <h4 class="font-semibold mb-4">Quick Links</h4>
-          <ul class="space-y-2 text-gray-400">
-            <li><a href="complaint.html" class="hover:text-white">File Complaint</a></li>
-            <li><a href="status.html" class="hover:text-white">Track Status</a></li>
-            <li><a href="dashboard.html" class="hover:text-white">Dashboard</a></li>
-          </ul>
+        <div class="text-gray-500 text-sm">
+          &copy; 2024 Government of Rajasthan. All rights reserved.
         </div>
-        
-        <div>
-          <h4 class="font-semibold mb-4">Support</h4>
-          <ul class="space-y-2 text-gray-400">
-            <li><a href="#help" class="hover:text-white">Help Center</a></li>
-            <li><a href="#faq" class="hover:text-white">FAQ</a></li>
-            <li><a href="#contact" class="hover:text-white">Contact</a></li>
-          </ul>
-        </div>
-        
-        <div>
-          <h4 class="font-semibold mb-4">Contact</h4>
-          <div class="text-gray-400 space-y-2">
-            <p><i class="fas fa-phone w-4"></i> 181 (Toll Free)</p>
-            <p><i class="fas fa-envelope w-4"></i> help@rajasthan.gov.in</p>
-            <p><i class="fas fa-clock w-4"></i> 24/7 Support</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-        <p>&copy; 2024 Government of Rajasthan. All rights reserved.</p>
       </div>
     </div>
   </footer>
 
+  <script src="assets/js/modern-framework.js"></script>
   <script>
-    // Mobile menu toggle
-    const mobileToggle = document.getElementById('mobileToggle');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const mobileClose = document.getElementById('mobileClose');
-
-    mobileToggle.addEventListener('click', () => {
-      mobileMenu.classList.add('active');
-    });
-
-    mobileClose.addEventListener('click', () => {
-      mobileMenu.classList.remove('active');
-    });
-
-    // Close mobile menu when clicking on links
-    document.querySelectorAll('.mobile-nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.remove('active');
-      });
-    });
-
-    // Animate statistics on page load
-    function animateStats() {
-      const stats = [
-        { id: 'totalComplaints', target: 125486, suffix: '' },
-        { id: 'resolvedComplaints', target: 98742, suffix: '' },
-        { id: 'avgResolution', target: 4.2, suffix: ' Days', decimal: true },
-        { id: 'satisfaction', target: 96, suffix: '%' }
-      ];
-
-      stats.forEach(stat => {
-        const element = document.getElementById(stat.id);
-        if (!element) return;
-
-        let current = 0;
-        const increment = stat.target / 100;
-        const timer = setInterval(() => {
-          current += increment;
-          if (current >= stat.target) {
-            current = stat.target;
-            clearInterval(timer);
-          }
-          
-          if (stat.decimal) {
-            element.textContent = current.toFixed(1) + stat.suffix;
-          } else {
-            element.textContent = Math.floor(current).toLocaleString() + stat.suffix;
-          }
-        }, 20);
-      });
-    }
-
-    // Run animation when page loads
-    window.addEventListener('load', animateStats);
-
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
+    // Page-specific functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Theme toggle functionality
+      const themeToggle = document.getElementById('themeToggle');
+      const themeIcon = document.getElementById('themeIcon');
+      const body = document.body;
+      
+      // Check for saved theme preference or default to 'light'
+      const currentTheme = localStorage.getItem('theme') || 'light';
+      body.setAttribute('data-theme', currentTheme);
+      
+      // Update icon based on current theme
+      updateThemeIcon(currentTheme);
+      
+      function updateThemeIcon(theme) {
+        if (theme === 'dark') {
+          themeIcon.className = 'fas fa-sun';
+          themeToggle.style.color = '#fbbf24';
+        } else {
+          themeIcon.className = 'fas fa-moon';
+          themeToggle.style.color = 'var(--gray-600)';
         }
+      }
+      
+      themeToggle.addEventListener('click', function() {
+        const currentTheme = body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        body.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon(newTheme);
+        
+        showNotification(`Switched to ${newTheme} theme`, 'info', 2000);
       });
+
+      // Animate counters
+      function animateCounters() {
+        const counters = document.querySelectorAll('.stat-number');
+        counters.forEach(counter => {
+          const target = parseInt(counter.getAttribute('data-count'));
+          const count = +counter.innerText;
+          const increment = target / 200;
+          
+          if (count < target) {
+            counter.innerText = Math.ceil(count + increment);
+            setTimeout(animateCounters, 10);
+          } else {
+            counter.innerText = target.toLocaleString();
+          }
+        });
+      }
+      
+      // Start counter animation when stats section is visible
+      const statsSection = document.querySelector('.stats-section');
+      if (statsSection) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              animateCounters();
+              observer.unobserve(entry.target);
+            }
+          });
+        });
+        observer.observe(statsSection);
+      }
+
+      // Initialize chatbot
+      const chatbotFab = document.getElementById('chatbotFab');
+      if (chatbotFab) {
+        chatbotFab.addEventListener('click', function() {
+          const modal = createModal(
+            'AI Assistant',
+            `
+              <div class="space-y-4">
+                <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+                  <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-robot text-white"></i>
+                  </div>
+                  <div>
+                    <div class="font-semibold">Rajasthan AI Assistant</div>
+                    <div class="text-sm text-gray-500">Online • Ready to help</div>
+                  </div>
+                </div>
+                <div class="space-y-3">
+                  <p>Hello! I'm your AI assistant. How can I help you today?</p>
+                  <div class="grid grid-cols-2 gap-2">
+                    <button class="btn btn-secondary btn-sm" onclick="window.location.href='complaint.html'">File Complaint</button>
+                    <button class="btn btn-secondary btn-sm" onclick="window.location.href='status.html'">Track Status</button>
+                    <button class="btn btn-secondary btn-sm" onclick="window.location.href='dashboard.html'">Dashboard</button>
+                    <button class="btn btn-secondary btn-sm" onclick="showNotification('Contact: 181 (Toll Free)', 'info')">Contact</button>
+                  </div>
+                </div>
+              </div>
+            `,
+            [
+              { text: 'Close', class: 'btn-secondary', onclick: 'this.closest(".modal-overlay").remove()' }
+            ]
+          );
+        });
+      }
+
+      // Add 3D hover effects for service cards
+      document.querySelectorAll('.service-card').forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+          const rect = this.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = (y - centerY) / 20;
+          const rotateY = (centerX - x) / 20;
+          
+          this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+        });
+      });
+
+      // Simple Floating Particles
+      function createFloatingParticles() {
+        const particlesContainer = document.getElementById('particles');
+        
+        function createParticle() {
+          const particle = document.createElement('div');
+          particle.className = 'particle';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.animationDuration = (Math.random() * 6 + 4) + 's';
+          
+          particlesContainer.appendChild(particle);
+          
+          setTimeout(() => {
+            if (particle.parentNode) {
+              particle.parentNode.removeChild(particle);
+            }
+          }, 10000);
+        }
+        
+        // Create initial particles
+        for (let i = 0; i < 15; i++) {
+          setTimeout(createParticle, Math.random() * 3000);
+        }
+        
+        // Continue creating particles
+        setInterval(createParticle, 800);
+      }
+      
+      // Start floating particles
+      createFloatingParticles();
+
+      // Welcome notification
+      setTimeout(() => {
+        showNotification('🚀 Welcome to Rajasthan Digital Portal! 🚀', 'success', 3000);
+      }, 2000);
     });
   </script>
 </body>
