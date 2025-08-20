@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E0F6FF;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="buildingGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5F5DC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E6E6FA;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="flagGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF9933;stop-opacity:1" />
+      <stop offset="33%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="66%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#138808;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Sky Background -->
+  <rect width="800" height="500" fill="url(#skyGradient)"/>
+  
+  <!-- Clouds -->
+  <ellipse cx="150" cy="80" rx="40" ry="20" fill="white" opacity="0.8"/>
+  <ellipse cx="180" cy="75" rx="35" ry="18" fill="white" opacity="0.8"/>
+  <ellipse cx="620" cy="60" rx="50" ry="25" fill="white" opacity="0.8"/>
+  <ellipse cx="660" cy="55" rx="40" ry="20" fill="white" opacity="0.8"/>
+  
+  <!-- Government Building -->
+  <rect x="200" y="200" width="400" height="250" fill="url(#buildingGradient)" stroke="#DDD" stroke-width="2"/>
+  
+  <!-- Building Columns -->
+  <rect x="230" y="200" width="20" height="250" fill="#E6E6FA" stroke="#CCC" stroke-width="1"/>
+  <rect x="270" y="200" width="20" height="250" fill="#E6E6FA" stroke="#CCC" stroke-width="1"/>
+  <rect x="310" y="200" width="20" height="250" fill="#E6E6FA" stroke="#CCC" stroke-width="1"/>
+  <rect x="350" y="200" width="20" height="250" fill="#E6E6FA" stroke="#CCC" stroke-width="1"/>
+  <rect x="390" y="200" width="20" height="250" fill="#E6E6FA" stroke="#CCC" stroke-width="1"/>
+  <rect x="430" y="200" width="20" height="250" fill="#E6E6FA" stroke="#CCC" stroke-width="1"/>
+  <rect x="470" y="200" width="20" height="250" fill="#E6E6FA" stroke="#CCC" stroke-width="1"/>
+  <rect x="510" y="200" width="20" height="250" fill="#E6E6FA" stroke="#CCC" stroke-width="1"/>
+  <rect x="550" y="200" width="20" height="250" fill="#E6E6FA" stroke="#CCC" stroke-width="1"/>
+  
+  <!-- Building Roof -->
+  <polygon points="180,200 400,120 620,200" fill="#8B4513" stroke="#654321" stroke-width="2"/>
+  
+  <!-- Flag Pole -->
+  <rect x="395" y="50" width="4" height="120" fill="#8B4513"/>
+  
+  <!-- Indian Flag -->
+  <rect x="400" y="50" width="60" height="40" fill="url(#flagGradient)" stroke="#666" stroke-width="1"/>
+  
+  <!-- Ashoka Chakra (simplified) -->
+  <circle cx="430" cy="70" r="8" fill="none" stroke="#000080" stroke-width="1"/>
+  <circle cx="430" cy="70" r="2" fill="#000080"/>
+  
+  <!-- Steps -->
+  <rect x="180" y="440" width="440" height="15" fill="#CCC"/>
+  <rect x="190" y="425" width="420" height="15" fill="#DDD"/>
+  <rect x="200" y="410" width="400" height="15" fill="#EEE"/>
+  
+  <!-- Main Entrance Door -->
+  <rect x="350" y="350" width="100" height="100" fill="#8B4513" stroke="#654321" stroke-width="2"/>
+  <circle cx="430" cy="400" r="3" fill="#FFD700"/>
+  
+  <!-- Windows -->
+  <rect x="220" y="250" width="30" height="40" fill="#87CEEB" stroke="#666" stroke-width="1"/>
+  <rect x="280" y="250" width="30" height="40" fill="#87CEEB" stroke="#666" stroke-width="1"/>
+  <rect x="490" y="250" width="30" height="40" fill="#87CEEB" stroke="#666" stroke-width="1"/>
+  <rect x="550" y="250" width="30" height="40" fill="#87CEEB" stroke="#666" stroke-width="1"/>
+  
+  <!-- Trees -->
+  <ellipse cx="100" cy="350" rx="40" ry="50" fill="#228B22"/>
+  <rect x="95" y="380" width="10" height="70" fill="#8B4513"/>
+  
+  <ellipse cx="700" cy="360" rx="35" ry="45" fill="#228B22"/>
+  <rect x="695" y="385" width="10" height="65" fill="#8B4513"/>
+  
+  <!-- Digital Elements -->
+  <circle cx="50" cy="150" r="20" fill="#4169E1" opacity="0.8"/>
+  <text x="50" y="157" text-anchor="middle" fill="white" font-size="12" font-weight="bold">📱</text>
+  
+  <circle cx="750" cy="180" r="18" fill="#32CD32" opacity="0.8"/>
+  <text x="750" y="187" text-anchor="middle" fill="white" font-size="12" font-weight="bold">💻</text>
+  
+  <!-- Decorative Pattern -->
+  <circle cx="400" cy="480" r="3" fill="#FFD700" opacity="0.7"/>
+  <circle cx="420" cy="485" r="2" fill="#FFD700" opacity="0.7"/>
+  <circle cx="380" cy="485" r="2" fill="#FFD700" opacity="0.7"/>
+</svg>

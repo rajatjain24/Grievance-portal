@@ -2,1007 +2,604 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🏛️ Admin Dashboard - Rajasthan Seva Portal</title>
+  <title>Admin Portal - Rajasthan Seva Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="admin-api.js"></script>
+  <link rel="stylesheet" href="style.css"/>
   <style>
-    * {
+    body {
+      font-family: Poppins, Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-attachment: fixed;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #2c3e50;
-      overflow-x: hidden;
-    }
-    
-    /* Admin Sidebar */
-    .admin-layout {
-      display: flex;
       min-height: 100vh;
     }
     
-    .sidebar {
-      width: 280px;
+    /* Admin Header Section */
+    .admin-header {
+      padding: 40px 20px 20px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .admin-hero {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(20px);
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-      z-index: 1000;
-      position: fixed;
-      height: 100vh;
-      overflow-y: auto;
-      transition: all 0.3s ease;
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 30px;
+      padding: 40px 50px;
+      box-shadow: 
+        0 30px 60px rgba(102, 126, 234, 0.15),
+        0 1px 2px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 30px;
     }
     
-    .sidebar-header {
-      padding: 2rem 1.5rem;
-      border-bottom: 1px solid rgba(102, 126, 234, 0.1);
-      text-align: center;
+    .admin-hero-content {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 40px;
+      align-items: center;
     }
     
-    .admin-logo {
-      font-size: 24px;
-      font-weight: 800;
+    .admin-main-title {
+      font-size: 48px;
       background: linear-gradient(135deg, #667eea, #764ba2);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 0.5rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+      animation: textGlow 3s ease-in-out infinite alternate;
     }
     
     .admin-subtitle {
-      font-size: 12px;
+      font-size: 20px;
       color: #64748b;
-      font-weight: 500;
+      margin: 0;
+      line-height: 1.5;
     }
     
-    .nav-menu {
-      padding: 1rem 0;
+    .dashboard-img {
+      width: 100%;
+      max-width: 300px;
+      height: auto;
+      filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
+      animation: float 6s ease-in-out infinite;
     }
     
-    .nav-item {
-      list-style: none;
-      margin: 0.25rem 0;
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
     }
     
-    .nav-link {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0.75rem 1.5rem;
-      color: #64748b;
-      text-decoration: none;
-      transition: all 0.3s ease;
-      border-radius: 0 25px 25px 0;
-      margin-right: 1rem;
-      font-weight: 500;
-      position: relative;
-    }
-    
-    .nav-link:hover {
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-      color: #667eea;
-      transform: translateX(5px);
-    }
-    
-    .nav-link.active {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-    }
-    
-    .nav-link i {
-      width: 20px;
-      text-align: center;
-      font-size: 16px;
-    }
-    
-    .badge {
-      background: #ef4444;
-      color: white;
-      font-size: 11px;
-      padding: 2px 6px;
-      border-radius: 10px;
-      font-weight: 600;
-      margin-left: auto;
-    }
-    
-    /* Main Content */
-    .main-content {
-      margin-left: 280px;
-      flex: 1;
-      padding: 2rem;
-      background: rgba(255, 255, 255, 0.05);
-    }
-    
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-    
-    .page-title {
-      color: white;
-      font-size: 2rem;
-      font-weight: 700;
-    }
-    
-    .admin-actions {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-    }
-    
-    .admin-profile {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      padding: 0.5rem 1rem;
-      border-radius: 25px;
-      color: white;
-    }
-    
-    .profile-avatar {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, #fbbf24, #f59e0b);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-    }
-    
-    .logout-btn {
-      background: rgba(239, 68, 68, 0.2);
-      color: #ef4444;
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: all 0.3s ease;
-    }
-    
-    .logout-btn:hover {
-      background: #ef4444;
-      color: white;
-    }
-    
-    /* Dashboard Cards */
-    .dashboard-grid {
+    /* Dashboard Statistics Cards */
+    .dashboard-stats {
+      max-width: 1200px;
+      margin: 0 auto 40px auto;
+      padding: 0 20px;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
+      gap: 25px;
     }
     
-    .dashboard-card {
+    .stat-card {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .dashboard-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-    }
-    
-    .card-header {
+      padding: 30px 25px;
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1rem;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 
+        0 15px 35px rgba(102, 126, 234, 0.1),
+        0 1px 2px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      animation: slideInUp 0.6s ease-out;
+      animation-fill-mode: both;
     }
     
-    .card-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 15px;
+    .stat-card:nth-child(1) { animation-delay: 0.1s; }
+    .stat-card:nth-child(2) { animation-delay: 0.2s; }
+    .stat-card:nth-child(3) { animation-delay: 0.3s; }
+    .stat-card:nth-child(4) { animation-delay: 0.4s; }
+    
+    .stat-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 
+        0 25px 50px rgba(102, 126, 234, 0.2),
+        0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    
+    .stat-card.total {
+      border-left: 5px solid #667eea;
+    }
+    
+    .stat-card.resolved {
+      border-left: 5px solid #27ae60;
+    }
+    
+    .stat-card.pending {
+      border-left: 5px solid #f39c12;
+    }
+    
+    .stat-card.critical {
+      border-left: 5px solid #e74c3c;
+    }
+    
+    .stat-icon {
+      font-size: 40px;
+      width: 70px;
+      height: 70px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      color: white;
+      border-radius: 15px;
+      background: rgba(102, 126, 234, 0.1);
     }
     
-    .icon-primary { background: linear-gradient(135deg, #667eea, #764ba2); }
-    .icon-success { background: linear-gradient(135deg, #10b981, #059669); }
-    .icon-warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
-    .icon-danger { background: linear-gradient(135deg, #ef4444, #dc2626); }
-    
-    .card-number {
-      font-size: 2.5rem;
-      font-weight: 800;
-      color: #1f2937;
-      margin-bottom: 0.5rem;
+    .stat-card.total .stat-icon {
+      background: rgba(102, 126, 234, 0.1);
     }
     
-    .card-title {
-      font-size: 1rem;
+    .stat-card.resolved .stat-icon {
+      background: rgba(39, 174, 96, 0.1);
+    }
+    
+    .stat-card.pending .stat-icon {
+      background: rgba(243, 156, 18, 0.1);
+    }
+    
+    .stat-card.critical .stat-icon {
+      background: rgba(231, 76, 60, 0.1);
+    }
+    
+    .stat-info {
+      flex: 1;
+    }
+    
+    .stat-number {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      line-height: 1;
+    }
+    
+    .stat-card.total .stat-number { color: #667eea; }
+    .stat-card.resolved .stat-number { color: #27ae60; }
+    .stat-card.pending .stat-number { color: #f39c12; }
+    .stat-card.critical .stat-number { color: #e74c3c; }
+    
+    .stat-label {
+      font-size: 14px;
       color: #64748b;
-      font-weight: 500;
-    }
-    
-    .card-trend {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
-    
-    .trend-up { color: #10b981; }
-    .trend-down { color: #ef4444; }
-    
-    /* Charts Section */
-    .charts-section {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-    
-    .chart-container {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .chart-title {
-      font-size: 1.25rem;
       font-weight: 600;
-      color: #1f2937;
-      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     
-    /* Recent Activity */
-    .activity-section {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .activity-item {
-      display: flex;
-      gap: 1rem;
-      padding: 1rem 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    }
-    
-    .activity-item:last-child {
-      border-bottom: none;
-    }
-    
-    .activity-icon {
-      width: 40px;
-      height: 40px;
+    /* Enhanced Section Title */
+    .section-title {
       background: linear-gradient(135deg, #667eea, #764ba2);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      flex-shrink: 0;
-    }
-    
-    .activity-content h4 {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: #1f2937;
-      margin-bottom: 0.25rem;
-    }
-    
-    .activity-content p {
-      font-size: 0.75rem;
-      color: #64748b;
-    }
-    
-    .activity-time {
-      font-size: 0.75rem;
-      color: #9ca3af;
-      margin-left: auto;
-      flex-shrink: 0;
-    }
-    
-    /* Quick Actions */
-    .quick-actions {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    
-    .action-btn {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 15px;
-      padding: 1.5rem;
-      text-decoration: none;
-      color: #1f2937;
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.75rem;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 32px;
+      font-weight: 700;
       text-align: center;
+      margin-bottom: 30px;
     }
-    
-    .action-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-      background: rgba(255, 255, 255, 1);
+    nav {
+      background: #222553;
+      color: #fff;
+      padding: 16px 36px;
+      display: flex; justify-content: space-between; align-items: center;
     }
-    
-    .action-icon {
-      width: 50px;
-      height: 50px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 20px;
+    .logo {font-size:23px; color:#4fd2ff; font-weight:700;}
+    nav ul {list-style:none;display:flex;gap:18px;margin:0;padding:0;}
+    nav ul li a {color:#fff!important; text-decoration:none; font-weight:500; padding:6px 12px;border-radius:6px;transition: background .13s;}
+    nav ul li a:hover {background: #ffffff18; color: #4fd2ff!important;}
+    .main {
+      max-width: 1000px; margin: 38px auto; background: #fff; border-radius: 16px;
+      box-shadow: 0 8px 30px #0099ff22; padding: 34px 28px 18px 28px;
     }
-    
-    .action-title {
-      font-weight: 600;
-      font-size: 0.875rem;
+    .main h2 {color: #002b63; text-align:center;}
+    .filters {display:flex; gap:18px; margin:16px 0 24px 0;}
+    .filters select {padding:6px 12px; border-radius:7px; border:1px solid #b5d6ff; font-size:14px;}
+    table {width:100%; border-collapse:collapse; margin-top:12px;}
+    th, td {padding:11px 8px; border-bottom:1px solid #f2f2f2;}
+    th {background:#f4faff; color:#006bbc;}
+    td.status-cell {text-align:center;}
+    .status-chip {
+      display: inline-block; padding: 7px 17px; border-radius:14px; font-size:14px; font-weight:600;
     }
-    
-    /* Mobile Responsive */
-    @media (max-width: 1024px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-      
-      .sidebar.active {
-        transform: translateX(0);
-      }
-      
-      .main-content {
-        margin-left: 0;
-      }
-      
-      .charts-section {
+    .status-Registered   {background: #e3e8ed; color: #606060;}
+    .status-Processing   {background: #d2ebff; color: #157af6;}
+    .status-Review       {background: #fff1d6; color: #e88800;}
+    .status-Resolved     {background: #ddf7e2; color: #059033;}
+    .update-select {
+      padding:6px 11px; border-radius:8px; font-size:14px; border:1px solid #d4e6fa;
+      background: #f8fbff;
+      margin-top:0;
+    }
+    .alert {margin:13px 0; color:#c0392b; background: #ffd3cf; border-radius:8px; padding:10px 13px; font-size: 15px;}
+    .nodata {text-align:center; margin:36px; color: #aaa;}
+    /* Comprehensive Responsive Design */
+    @media(max-width: 1024px) {
+      .admin-hero-content {
         grid-template-columns: 1fr;
+        text-align: center;
+        gap: 30px;
+      }
+      
+      .admin-hero-image {
+        order: 1;
+      }
+      
+      .admin-title-section {
+        order: 2;
+      }
+      
+      .admin-main-title {
+        font-size: 36px;
+      }
+      
+      .dashboard-stats {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
       }
     }
     
-    @media (max-width: 768px) {
-      .main-content {
-        padding: 1rem;
+    @media(max-width: 768px) {
+      .admin-header {
+        padding: 20px 15px;
       }
       
-      .dashboard-grid {
+      .admin-hero {
+        padding: 30px 25px;
+      }
+      
+      .admin-main-title {
+        font-size: 32px;
+      }
+      
+      .admin-subtitle {
+        font-size: 18px;
+      }
+      
+      .dashboard-stats {
         grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 0 15px;
       }
       
-      .quick-actions {
-        grid-template-columns: repeat(2, 1fr);
+      .stat-card {
+        padding: 25px 20px;
+      }
+      
+      .stat-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 32px;
+      }
+      
+      .stat-number {
+        font-size: 28px;
+      }
+      
+      .section-title {
+        font-size: 24px;
+      }
+      
+      nav, .filters, .main {
+        flex-direction: column;
+      }
+      
+      .main {
+        padding: 5vw 3vw;
+        margin: 20px 15px;
+      }
+      
+      table, th, td {
+        font-size: 12px;
+      }
+      
+      .filters {
+        gap: 15px;
+      }
+      
+      .filters > div {
+        width: 100%;
+      }
+      
+      .filters select {
+        width: 100%;
+      }
+    }
+    
+    @media(max-width: 480px) {
+      .admin-main-title {
+        font-size: 28px;
+      }
+      
+      .admin-subtitle {
+        font-size: 16px;
+      }
+      
+      .dashboard-stats {
+        padding: 0 10px;
+      }
+      
+      .stat-card {
+        padding: 20px 15px;
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+      }
+      
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 28px;
+        margin: 0 auto;
+      }
+      
+      .stat-number {
+        font-size: 24px;
+      }
+      
+      .main {
+        margin: 10px;
+        padding: 20px 15px;
+      }
+      
+      table, th, td {
+        font-size: 11px;
+        padding: 8px 4px;
+      }
+      
+      .update-select {
+        font-size: 12px;
+        padding: 4px 8px;
+      }
+      
+      .section-title {
+        font-size: 20px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="admin-layout">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <div class="admin-logo">🏛️ Admin Portal</div>
-        <div class="admin-subtitle">Rajasthan Seva Management</div>
+  <nav>
+    <span class="logo">Admin Panel</span>
+    <ul>
+      <li><a href="admin.html" style="color:#4fd2ff;">Dashboard</a></li>
+      <li><a href="categories.html">Category Wise</a></li>
+      <li><a href="index.html">← Back to Home</a></li>
+      <li><a href="#" id="logoutBtn" style="background:#dc3545;">Logout</a></li>
+    </ul>
+  </nav>
+  <!-- Admin Dashboard Header -->
+  <div class="admin-header">
+    <div class="admin-hero">
+      <div class="admin-hero-content">
+        <div class="admin-title-section">
+          <h1 class="admin-main-title">Admin Dashboard</h1>
+          <p class="admin-subtitle">Comprehensive complaint management and analytics</p>
+        </div>
+        <div class="admin-hero-image">
+          <img src="images/admin-dashboard.svg" alt="Admin Dashboard" class="dashboard-img">
+        </div>
       </div>
-      
-      <nav>
-        <ul class="nav-menu">
-          <li class="nav-item">
-            <a href="admin.html" class="nav-link active">
-              <i class="fas fa-chart-pie"></i>
-              <span>Dashboard</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="admin-complaints.html" class="nav-link">
-              <i class="fas fa-inbox"></i>
-              <span>All Complaints</span>
-              <span class="badge" id="complaintsCount">24</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="admin-analytics.html" class="nav-link">
-              <i class="fas fa-chart-line"></i>
-              <span>Analytics</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="admin-users.html" class="nav-link">
-              <i class="fas fa-users"></i>
-              <span>Users Management</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="admin-departments.html" class="nav-link">
-              <i class="fas fa-building"></i>
-              <span>Departments</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="admin-reports.html" class="nav-link">
-              <i class="fas fa-file-alt"></i>
-              <span>Reports</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="admin-settings.html" class="nav-link">
-              <i class="fas fa-cog"></i>
-              <span>Settings</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="admin-news.html" class="nav-link">
-              <i class="fas fa-newspaper"></i>
-              <span>Rajasthan News</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="admin-notifications.html" class="nav-link">
-              <i class="fas fa-bell"></i>
-              <span>Notifications</span>
-              <span class="badge">3</span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="index.html" class="nav-link">
-              <i class="fas fa-home"></i>
-              <span>Back to Portal</span>
-            </a>
-          </li>
-        </ul>
-      </nav>
-    </aside>
+    </div>
+  </div>
+
+  <!-- Dashboard Statistics Cards -->
+  <div class="dashboard-stats">
+    <div class="stat-card total">
+      <div class="stat-icon">📊</div>
+      <div class="stat-info">
+        <div class="stat-number" id="totalComplaints">0</div>
+        <div class="stat-label">Total Complaints</div>
+      </div>
+    </div>
     
-    <!-- Main Content -->
-    <main class="main-content">
-      <div class="top-bar">
-        <h1 class="page-title">Dashboard Overview</h1>
-        <div class="admin-actions">
-          <div class="admin-profile">
-            <div class="profile-avatar">AD</div>
-            <span>Admin User</span>
-          </div>
-          <a href="#" id="logoutBtn" class="logout-btn">
-            <i class="fas fa-sign-out-alt"></i>
-            Logout
-          </a>
-        </div>
+    <div class="stat-card resolved">
+      <div class="stat-icon">✅</div>
+      <div class="stat-info">
+        <div class="stat-number" id="resolvedComplaints">0</div>
+        <div class="stat-label">Resolved</div>
       </div>
-      
-      <!-- Dashboard Stats -->
-      <div class="dashboard-grid">
-        <div class="dashboard-card">
-          <div class="card-header">
-            <div>
-              <div class="card-number" id="totalComplaints">1,247</div>
-              <div class="card-title">Total Complaints</div>
-            </div>
-            <div class="card-icon icon-primary">
-              <i class="fas fa-inbox"></i>
-            </div>
-          </div>
-          <div class="card-trend trend-up">
-            <i class="fas fa-arrow-up"></i>
-            <span>+12% from last month</span>
-          </div>
-        </div>
-        
-        <div class="dashboard-card">
-          <div class="card-header">
-            <div>
-              <div class="card-number" id="resolvedComplaints">986</div>
-              <div class="card-title">Resolved Cases</div>
-            </div>
-            <div class="card-icon icon-success">
-              <i class="fas fa-check-circle"></i>
-            </div>
-          </div>
-          <div class="card-trend trend-up">
-            <i class="fas fa-arrow-up"></i>
-            <span>+8% resolution rate</span>
-          </div>
-        </div>
-        
-        <div class="dashboard-card">
-          <div class="card-header">
-            <div>
-              <div class="card-number" id="pendingComplaints">124</div>
-              <div class="card-title">Pending Review</div>
-            </div>
-            <div class="card-icon icon-warning">
-              <i class="fas fa-hourglass-half"></i>
-            </div>
-          </div>
-          <div class="card-trend trend-down">
-            <i class="fas fa-arrow-down"></i>
-            <span>-3% from last week</span>
-          </div>
-        </div>
-        
-        <div class="dashboard-card">
-          <div class="card-header">
-            <div>
-              <div class="card-number">96%</div>
-              <div class="card-title">Satisfaction Rate</div>
-            </div>
-            <div class="card-icon icon-primary">
-              <i class="fas fa-smile"></i>
-            </div>
-          </div>
-          <div class="card-trend trend-up">
-            <i class="fas fa-arrow-up"></i>
-            <span>+2% this month</span>
-          </div>
-        </div>
+    </div>
+    
+    <div class="stat-card pending">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-info">
+        <div class="stat-number" id="pendingComplaints">0</div>
+        <div class="stat-label">Pending</div>
       </div>
-      
-      <!-- Quick Actions -->
-      <div class="quick-actions">
-        <a href="admin-complaints.html" class="action-btn">
-          <div class="action-icon">
-            <i class="fas fa-plus"></i>
-          </div>
-          <div class="action-title">New Complaint</div>
-        </a>
-        
-        <a href="admin-analytics.html" class="action-btn">
-          <div class="action-icon">
-            <i class="fas fa-chart-bar"></i>
-          </div>
-          <div class="action-title">View Analytics</div>
-        </a>
-        
-        <a href="admin-reports.html" class="action-btn">
-          <div class="action-icon">
-            <i class="fas fa-download"></i>
-          </div>
-          <div class="action-title">Export Report</div>
-        </a>
-        
-        <a href="admin-settings.html" class="action-btn">
-          <div class="action-icon">
-            <i class="fas fa-cog"></i>
-          </div>
-          <div class="action-title">Settings</div>
-        </a>
+    </div>
+    
+    <div class="stat-card critical">
+      <div class="stat-icon">🚨</div>
+      <div class="stat-info">
+        <div class="stat-number" id="criticalComplaints">0</div>
+        <div class="stat-label">Critical</div>
       </div>
-      
-      <!-- Charts Section -->
-      <div class="charts-section">
-        <div class="chart-container">
-          <h3 class="chart-title">📊 Complaints Trend (Last 30 Days)</h3>
-          <canvas id="complaintsChart" height="100"></canvas>
-        </div>
-        
-        <div class="chart-container">
-          <h3 class="chart-title">📈 Category Distribution</h3>
-          <canvas id="categoryChart"></canvas>
-        </div>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="main">
+    <h2 class="section-title">📋 Complaints Management</h2>
+    <div class="filters">
+      <div>
+        <label for="catFilter">Category:</label>
+        <select id="catFilter">
+          <option value="">All</option>
+          <option value="Water">Water</option>
+          <option value="Electricity">Electricity</option>
+          <option value="Road">Road</option>
+          <option value="Sanitation">Sanitation</option>
+          <option value="Other">Other</option>
+        </select>
       </div>
-      
-      <!-- Recent Activity -->
-      <div class="activity-section">
-        <h3 class="chart-title">🕒 Recent Activity</h3>
-        <div class="activity-list">
-          <div class="activity-item">
-            <div class="activity-icon">
-              <i class="fas fa-plus"></i>
-            </div>
-            <div class="activity-content">
-              <h4>New complaint registered</h4>
-              <p>Water supply issue reported in Jaipur Sector 15</p>
-            </div>
-            <div class="activity-time">2 min ago</div>
-          </div>
-          
-          <div class="activity-item">
-            <div class="activity-icon">
-              <i class="fas fa-check"></i>
-            </div>
-            <div class="activity-content">
-              <h4>Complaint resolved</h4>
-              <p>Road repair in Udaipur completed successfully</p>
-            </div>
-            <div class="activity-time">15 min ago</div>
-          </div>
-          
-          <div class="activity-item">
-            <div class="activity-icon">
-              <i class="fas fa-user"></i>
-            </div>
-            <div class="activity-content">
-              <h4>New user registered</h4>
-              <p>Citizen from Jodhpur joined the portal</p>
-            </div>
-            <div class="activity-time">1 hour ago</div>
-          </div>
-          
-          <div class="activity-item">
-            <div class="activity-icon">
-              <i class="fas fa-edit"></i>
-            </div>
-            <div class="activity-content">
-              <h4>Status updated</h4>
-              <p>Electricity complaint moved to processing</p>
-            </div>
-            <div class="activity-time">2 hours ago</div>
-          </div>
-        </div>
+      <div>
+        <label for="statusFilter">Status:</label>
+        <select id="statusFilter">
+          <option value="">All</option>
+          <option value="Registered">Registered</option>
+          <option value="Processing">Processing</option>
+          <option value="Review">Review</option>
+          <option value="Resolved">Resolved</option>
+        </select>
       </div>
-    </main>
+    </div>
+    <div id="alert" class="alert" style="display:none"></div>
+    <div style="overflow-x:auto">
+      <table id="adminTable">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>Description</th>
+            <th>Date/Time</th>
+            <th>Status</th>
+            <th>Update Status</th>
+          </tr>
+        </thead>
+        <tbody id="adminBody"></tbody>
+      </table>
+    </div>
+    <div class="nodata" id="nodata" style="display:none">No complaints found.</div>
   </div>
   <script>
-    // Admin Dashboard Enhanced JavaScript
-    document.addEventListener('DOMContentLoaded', function() {
-      // Check admin authentication
-      if(localStorage.getItem("role")!=="admin" || !localStorage.getItem("token")) {
-        window.location.href="admin-login.html";
-      }
-      
-      // Initialize dashboard
-      initializeDashboard();
-      loadDashboardData();
-      initializeCharts();
-      startRealTimeUpdates();
-    });
-    
-    // Logout functionality
+    // Only allow admins
+    if(localStorage.getItem("role")!=="admin" || !localStorage.getItem("token"))
+      window.location.href="login.html";
     document.getElementById('logoutBtn').onclick = function(e){
-      e.preventDefault();
-      localStorage.clear();
-      window.location.href="admin-login.html";
+      e.preventDefault(); localStorage.clear(); window.location.href="login.html";
     };
-    
-    let dashboardData = {
-      totalComplaints: 1247,
-      resolvedComplaints: 986,
-      pendingComplaints: 124,
-      satisfactionRate: 96
-    };
-    
-    function initializeDashboard() {
-      // Animate dashboard cards on load
-      const cards = document.querySelectorAll('.dashboard-card');
-      cards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        setTimeout(() => {
-          card.style.transition = 'all 0.6s ease';
-          card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
-        }, index * 200);
-      });
+    const catFilter = document.getElementById('catFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    let rawComplaints = [];
+    function showAlert(msg) {
+      let alertDiv = document.getElementById('alert');
+      alertDiv.style.display = '';
+      alertDiv.textContent = msg;
+      setTimeout(()=>{alertDiv.style.display='none'}, 2500);
+    }
+    // Update statistics based on complaint data
+    function updateStatistics() {
+      const total = rawComplaints.length;
+      const resolved = rawComplaints.filter(c => c.status === 'Resolved').length;
+      const pending = rawComplaints.filter(c => ['Registered', 'Processing', 'Review'].includes(c.status)).length;
+      const critical = rawComplaints.filter(c => c.priority === 'High' || c.category === 'Emergency').length;
+      
+      document.getElementById('totalComplaints').textContent = total;
+      document.getElementById('resolvedComplaints').textContent = resolved;
+      document.getElementById('pendingComplaints').textContent = pending;
+      document.getElementById('criticalComplaints').textContent = critical;
       
       // Animate numbers
-      setTimeout(() => {
-        animateNumbers();
-      }, 800);
+      animateNumbers();
     }
     
     function animateNumbers() {
-      animateCounter('totalComplaints', 1247);
-      animateCounter('resolvedComplaints', 986);
-      animateCounter('pendingComplaints', 124);
-    }
-    
-    function animateCounter(elementId, target) {
-      const element = document.getElementById(elementId);
-      if (!element) return;
-      
-      let current = 0;
-      const increment = target / 50;
-      const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          element.textContent = target.toLocaleString();
-          clearInterval(timer);
-        } else {
-          element.textContent = Math.floor(current).toLocaleString();
-        }
-      }, 40);
-    }
-    
-    // Load dashboard data
-    async function loadDashboardData() {
-      try {
-        const adminAPI = new AdminAPI();
-        const stats = await adminAPI.getDashboardStats();
-        
-        updateDashboardStats({
-          total: stats.complaints.total,
-          resolved: stats.complaints.resolved,
-          pending: stats.complaints.pending,
-          satisfaction: stats.complaints.resolutionRate
-        });
-        
-        // Update complaints count in sidebar
-        const badge = document.getElementById('complaintsCount');
-        if (badge) {
-          badge.textContent = stats.complaints.total;
-        }
-        
-        // Update charts with real data
-        await loadChartData();
-        
-      } catch (error) {
-        console.error('Error loading dashboard data:', error);
-        // Fallback to default values
-        updateDashboardStats({
-          total: 0,
-          resolved: 0,
-          pending: 0,
-          satisfaction: 0
-        });
-      }
-    }
-    
-    function updateDashboardStats(stats) {
-      document.getElementById('totalComplaints').textContent = stats.total.toLocaleString();
-      document.getElementById('resolvedComplaints').textContent = stats.resolved.toLocaleString();
-      document.getElementById('pendingComplaints').textContent = stats.pending.toLocaleString();
-    }
-    
-    function updateComplaintsCount() {
-      const badge = document.getElementById('complaintsCount');
-      if (badge) {
-        badge.textContent = Math.floor(Math.random() * 50) + 10;
-      }
-    }
-    
-    // Initialize Charts
-    function initializeCharts() {
-      initComplaintsChart();
-      initCategoryChart();
-    }
-    
-    // Load chart data from API
-    async function loadChartData() {
-      try {
-        const adminAPI = new AdminAPI();
-        const analyticsData = await adminAPI.getAnalyticsData();
-        
-        // Update line chart with monthly trends
-        const complaintsChart = Chart.getChart('complaintsChart');
-        if (complaintsChart && analyticsData.monthlyTrends.length > 0) {
-          complaintsChart.data.labels = analyticsData.monthlyTrends.map(d => d.month);
-          complaintsChart.data.datasets[0].data = analyticsData.monthlyTrends.map(d => d.complaints);
-          complaintsChart.update();
-        }
-        
-        // Update doughnut chart with category breakdown
-        const categoryChart = Chart.getChart('categoryChart');
-        if (categoryChart && Object.keys(analyticsData.categoryBreakdown).length > 0) {
-          const categories = Object.keys(analyticsData.categoryBreakdown);
-          const counts = Object.values(analyticsData.categoryBreakdown);
-          
-          categoryChart.data.labels = categories;
-          categoryChart.data.datasets[0].data = counts;
-          categoryChart.update();
-        }
-        
-      } catch (error) {
-        console.error('Error loading chart data:', error);
-      }
-    }
-    
-    function initComplaintsChart() {
-      const ctx = document.getElementById('complaintsChart');
-      if (!ctx) return;
-      
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['1 Jan', '5 Jan', '10 Jan', '15 Jan', '20 Jan', '25 Jan', '30 Jan'],
-          datasets: [{
-            label: 'New Complaints',
-            data: [45, 52, 38, 65, 48, 73, 61],
-            borderColor: '#667eea',
-            backgroundColor: 'rgba(102, 126, 234, 0.1)',
-            borderWidth: 3,
-            fill: true,
-            tension: 0.4
-          }, {
-            label: 'Resolved',
-            data: [38, 45, 42, 58, 51, 67, 64],
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-            borderWidth: 3,
-            fill: true,
-            tension: 0.4
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: false
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: {
-                color: 'rgba(0, 0, 0, 0.05)'
-              }
-            },
-            x: {
-              grid: {
-                display: false
-              }
-            }
+      const numbers = document.querySelectorAll('.stat-number');
+      numbers.forEach(num => {
+        const target = parseInt(num.textContent);
+        let current = 0;
+        const increment = target / 50;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= target) {
+            current = target;
+            clearInterval(timer);
           }
-        }
+          num.textContent = Math.floor(current);
+        }, 20);
       });
     }
     
-    function initCategoryChart() {
-      const ctx = document.getElementById('categoryChart');
-      if (!ctx) return;
-      
-      new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Water Supply', 'Roads', 'Electricity', 'Sanitation', 'Others'],
-          datasets: [{
-            data: [30, 25, 20, 15, 10],
-            backgroundColor: [
-              '#667eea',
-              '#10b981',
-              '#f59e0b',
-              '#ef4444',
-              '#8b5cf6'
-            ],
-            borderWidth: 0,
-            hoverOffset: 10
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                padding: 20,
-                usePointStyle: true
-              }
+    // Fetch all complaints on load
+    async function loadComplaints(){
+      try{
+        let res = await fetch('/api/complaints', {
+          headers: {"Authorization": "Bearer " + localStorage.getItem("token")}
+        });
+        if(res.status==401 || res.status==403){localStorage.clear();window.location.href="login.html";return;}
+        let data = await res.json();
+        if(!res.ok) throw Error(data.msg||"Err fetching");
+        rawComplaints = data;
+        updateStatistics();
+        updateTable();
+      }catch{ showAlert("Could not load complaints."); }
+    }
+    function updateTable(){
+      let tBody = document.getElementById('adminBody');
+      let filtered = rawComplaints.filter(c=>
+        (!catFilter.value || c.category===catFilter.value) &&
+        (!statusFilter.value || c.status===statusFilter.value)
+      );
+      tBody.innerHTML = '';
+      if(!filtered.length){
+        document.getElementById('nodata').style.display='';
+        return;
+      } else { document.getElementById('nodata').style.display='none'; }
+      for(let c of filtered){
+        tBody.innerHTML += `
+          <tr>
+            <td>${c.createdBy?.name||"Unknown"}</td>
+            <td>${c.category||""}</td>
+            <td>${c.location||""}</td>
+            <td>${c.description||""}</td>
+            <td>${(new Date(c.createdAt)).toLocaleString()}</td>
+            <td class="status-cell"><span class="status-chip status-${c.status.replace(/\s/g,'')}">${c.status}</span></td>
+            <td>
+              <select class="update-select" data-id="${c._id}">
+                <option value="Registered" ${c.status=="Registered"?"selected":""}>Registered</option>
+                <option value="Processing" ${c.status=="Processing"?"selected":""}>Processing</option>
+                <option value="Review" ${c.status=="Review"?"selected":""}>Review</option>
+                <option value="Resolved" ${c.status=="Resolved"?"selected":""}>Resolved</option>
+              </select>
+            </td>
+          </tr>`;
+      }
+      // Add change event handlers
+      setTimeout(()=>{
+        document.querySelectorAll('.update-select').forEach(sel=>{
+          sel.onchange = async function(){
+            let id = this.getAttribute("data-id");
+            let status = this.value;
+            try{
+              let res = await fetch('/api/complaints/'+id, {
+                method:'PUT',
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": "Bearer " + localStorage.getItem("token")
+                },
+                body: JSON.stringify({status})
+              });
+              let data = await res.json();
+              if(res.ok) showAlert("Status updated.");
+              else showAlert(data.msg||"Failed to update status");
+              loadComplaints();
+            } catch {
+              showAlert("Network/server error.");
             }
-          },
-          cutout: '60%'
-        }
-      });
+          };
+        });
+      }, 80);
     }
-    
-    // Real-time updates simulation
-    function startRealTimeUpdates() {
-      setInterval(() => {
-        updateActivityFeed();
-        updateDashboardBadges();
-      }, 30000); // Update every 30 seconds
-    }
-    
-    function updateActivityFeed() {
-      const activities = [
-        {
-          icon: 'fas fa-plus',
-          title: 'New complaint registered',
-          desc: 'Water supply issue reported in Jaipur Sector ' + Math.floor(Math.random() * 50),
-          time: 'Just now'
-        },
-        {
-          icon: 'fas fa-check',
-          title: 'Complaint resolved',
-          desc: 'Road repair completed successfully',
-          time: '2 min ago'
-        },
-        {
-          icon: 'fas fa-user',
-          title: 'New user registered',
-          desc: 'Citizen from ' + ['Jodhpur', 'Udaipur', 'Kota', 'Bikaner'][Math.floor(Math.random() * 4)] + ' joined',
-          time: '5 min ago'
-        }
-      ];
-      
-      // Update first activity with random data
-      const firstActivity = document.querySelector('.activity-item');
-      if (firstActivity) {
-        const randomActivity = activities[Math.floor(Math.random() * activities.length)];
-        firstActivity.querySelector('i').className = randomActivity.icon;
-        firstActivity.querySelector('h4').textContent = randomActivity.title;
-        firstActivity.querySelector('p').textContent = randomActivity.desc;
-        firstActivity.querySelector('.activity-time').textContent = randomActivity.time;
-      }
-    }
-    
-    function updateDashboardBadges() {
-      const complaintsCount = document.getElementById('complaintsCount');
-      if (complaintsCount) {
-        const currentCount = parseInt(complaintsCount.textContent);
-        complaintsCount.textContent = currentCount + Math.floor(Math.random() * 3);
-      }
-    }
-    
-    // Mobile sidebar toggle
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('active');
-    }
-    
-    // Add mobile menu button for smaller screens
-    if (window.innerWidth <= 1024) {
-      const topBar = document.querySelector('.top-bar');
-      const menuBtn = document.createElement('button');
-      menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
-      menuBtn.className = 'mobile-menu-btn';
-      menuBtn.style.cssText = `
-        background: rgba(255,255,255,0.2);
-        border: none;
-        color: white;
-        padding: 0.5rem;
-        border-radius: 8px;
-        font-size: 1.2rem;
-        cursor: pointer;
-        margin-right: 1rem;
-      `;
-      menuBtn.onclick = toggleSidebar;
-      topBar.insertBefore(menuBtn, topBar.firstChild);
-    }
-    
-    // Enhanced hover effects for action buttons
-    document.querySelectorAll('.action-btn').forEach(btn => {
-      btn.addEventListener('mouseenter', function() {
-        this.style.transform = 'translateY(-8px) scale(1.05)';
-        this.querySelector('.action-icon').style.transform = 'rotate(5deg)';
-      });
-      
-      btn.addEventListener('mouseleave', function() {
-        this.style.transform = 'translateY(-3px) scale(1)';
-        this.querySelector('.action-icon').style.transform = 'rotate(0deg)';
-      });
-    });
-    
-    // Add clicking effects to dashboard cards
-    document.querySelectorAll('.dashboard-card').forEach(card => {
-      card.addEventListener('click', function() {
-        this.style.transform = 'translateY(-5px) scale(0.98)';
-        setTimeout(() => {
-          this.style.transform = 'translateY(-5px)';
-        }, 150);
-      });
-    });
+    catFilter.onchange = statusFilter.onchange = updateTable;
+    window.onload = loadComplaints;
   </script>
 </body>
 </html>

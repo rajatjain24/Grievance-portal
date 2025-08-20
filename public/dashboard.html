@@ -2,931 +2,179 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard - Rajasthan Seva Portal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/modern-framework.css">
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <title>User Dashboard - Rajasthan Seva Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
   <style>
     body {
-      background: var(--gray-50);
-      padding-top: 80px;
+      font-family: Poppins, Arial, sans-serif;
+      background: linear-gradient(120deg, #e6f0ff 0%, #c8e1ff 100%);
+      margin: 0;
+      padding: 0;
     }
-    
-    
-    
-    .profile-info {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      background: rgba(102, 126, 234, 0.1);
-      padding: var(--space-2) var(--space-4);
-      border-radius: var(--radius-full);
+    nav {
+      background: #00337c;
+      color: #fff;
+      padding: 14px 30px;
+      display: flex; justify-content: space-between; align-items: center;
     }
-    
-    .profile-avatar {
-      width: 40px;
-      height: 40px;
-      background: var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 600;
+    .logo {font-size:23px; color:#4fd2ff; font-weight:700;}
+    nav ul {list-style:none;display:flex;gap:18px;margin:0;padding:0;}
+    nav ul li a {color:#fff!important; text-decoration:none; font-weight:500; padding:6px 12px;border-radius:6px;transition: background .13s;}
+    nav ul li a:hover {background: #ffffff11; color: #4fd2ff!important;}
+    .main {
+      max-width: 870px; margin: 36px auto 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 30px #0099ff22;
+      padding: 34px 28px 18px 28px;
     }
-    
-    .profile-name {
-      font-weight: 600;
-      color: var(--gray-700);
-    }
-    
-    
-    .main-container {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 var(--space-6);
-    }
-    
-    .dashboard-header {
-      background: white;
-      border-radius: var(--radius-2xl);
-      padding: var(--space-8);
-      margin-bottom: var(--space-8);
-      box-shadow: var(--shadow-lg);
-    }
-    
-    .welcome-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-    
-    .welcome-text h1 {
-      color: #1f2937;
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-    
-    .welcome-text p {
-      color: #64748b;
-      font-size: 1.1rem;
-    }
-    
-    .quick-actions {
-      display: flex;
-      gap: 1rem;
-    }
-    
-    .action-btn {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      border: none;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    
-    .action-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-    }
-    
-    .action-btn.secondary {
-      background: rgba(102, 126, 234, 0.1);
-      color: #667eea;
-      border: 1px solid rgba(102, 126, 234, 0.2);
-    }
-    
-    .action-btn.secondary:hover {
-      background: rgba(102, 126, 234, 0.2);
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
-    }
-    
-    /* Stats Cards */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    
-    .stat-card {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.3s ease;
-    }
-    
-    .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    }
-    
-    .stat-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-    
-    .stat-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      color: white;
-    }
-    
-    .icon-primary { background: linear-gradient(135deg, #667eea, #764ba2); }
-    .icon-success { background: linear-gradient(135deg, #10b981, #059669); }
-    .icon-warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
-    .icon-info { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-    
-    .stat-number {
-      font-size: 2rem;
-      font-weight: 800;
-      color: #1f2937;
-      margin-bottom: 0.25rem;
-    }
-    
-    .stat-label {
-      color: #64748b;
-      font-weight: 500;
-    }
-    
-    /* Complaints Section */
-    .complaints-section {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-    
-    .section-title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #1f2937;
-    }
-    
-    .filters {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-    
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      min-width: 150px;
-    }
-    
-    .filter-label {
-      font-weight: 600;
-      color: #374151;
-      font-size: 0.875rem;
-    }
-    
-    .filter-select {
-      padding: 0.75rem 1rem;
-      border: 1px solid rgba(102, 126, 234, 0.2);
-      border-radius: 12px;
-      font-size: 0.875rem;
-      transition: all 0.3s ease;
-      background: white;
-    }
-    
-    .filter-select:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-    
-    /* Complaints Table */
-    .table-container {
-      overflow-x: auto;
-      border-radius: 12px;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-    
-    .complaints-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-    }
-    
-    .complaints-table th {
-      background: #f8fafc;
-      color: #374151;
-      font-weight: 600;
-      padding: 1rem;
-      text-align: left;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      font-size: 0.875rem;
-    }
-    
-    .complaints-table td {
-      padding: 1rem;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-      font-size: 0.875rem;
-    }
-    
-    .complaints-table tbody tr:hover {
-      background: rgba(102, 126, 234, 0.02);
-    }
-    
-    /* Status Chips */
+    .main h2 {color: #00337c; text-align:center;}
+    .filters {display:flex; gap:18px; margin:13px 0 24px 0;}
+    .filters select {padding:6px 12px; border-radius:7px; border:1px solid #b5d6ff; font-size:15px;}
+    table {width:100%; border-collapse:collapse; margin-top:16px;}
+    th, td {padding:11px 8px; border-bottom:1px solid #f2f2f2;}
+    th {background:#f4faff; color:#006bbc;}
+    td.status-cell {text-align:center;}
     .status-chip {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      display: inline-block; padding: 7px 17px; border-radius:14px; font-size:14px; font-weight:600;
+      background: #eee; color: #444;
     }
-    
-    .status-Registered {
-      background: rgba(107, 114, 128, 0.1);
-      color: #374151;
+    .status-Registered   {background: #e3e8ed; color: #606060;}
+    .status-Processing   {background: #d2ebff; color: #157af6;}
+    .status-Review       {background: #fff1d6; color: #e88800;}
+    .status-Resolved     {background: #ddf7e2; color: #059033;}
+    @media(max-width:700px){
+      nav, .filters, .main {flex-direction:column;}
+      .main{padding:7vw 3vw;}
+      table,th,td{font-size: 13px;}
     }
-    
-    .status-Processing {
-      background: rgba(59, 130, 246, 0.1);
-      color: #2563eb;
+    .alert { margin:12px 0; color:#c0392b; background: #ffd3cf; border-radius:8px; padding:10px 13px; font-size: 15px;}
+    .no-data {text-align:center; margin-top: 25px; color: #aaa;}
+    .add-btn {
+      display:inline-block; float: right; margin-bottom: 16px;
+      background: #007bff; color: #fff; border-radius: 16px; padding: 11px 22px; font-size: 15px; font-weight: bold;
+      text-decoration: none; transition: background .15s;
+      border: none; cursor: pointer;
     }
-    
-    .status-Review {
-      background: rgba(245, 158, 11, 0.1);
-      color: #d97706;
-    }
-    
-    .status-Resolved {
-      background: rgba(16, 185, 129, 0.1);
-      color: #059669;
-    }
-
-    /* Priority Badges */
-    .priority-badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.4rem 0.8rem;
-      border-radius: 16px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: capitalize;
-    }
-
-    .priority-high {
-      background: rgba(239, 68, 68, 0.1);
-      color: #dc2626;
-    }
-
-    .priority-medium {
-      background: rgba(245, 158, 11, 0.1);
-      color: #d97706;
-    }
-
-    .priority-low {
-      background: rgba(34, 197, 94, 0.1);
-      color: #16a34a;
-    }
-    
-    /* Alert Messages */
-    .alert {
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    
-    .alert-success {
-      background: rgba(16, 185, 129, 0.1);
-      color: #059669;
-      border: 1px solid rgba(16, 185, 129, 0.2);
-    }
-    
-    .alert-error {
-      background: rgba(239, 68, 68, 0.1);
-      color: #dc2626;
-      border: 1px solid rgba(239, 68, 68, 0.2);
-    }
-    
-    .no-data {
-      text-align: center;
-      padding: 3rem;
-      color: #64748b;
-    }
-    
-    .no-data i {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      opacity: 0.5;
-    }
-    
-    /* Responsive Design */
-    @media (max-width: 1024px) {
-      .nav-menu {
-        position: fixed;
-        top: 80px;
-        left: -100%;
-        width: 100%;
-        height: calc(100vh - 80px);
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding-top: 2rem;
-        transition: left 0.3s ease;
-      }
-      
-      .nav-menu.active {
-        left: 0;
-      }
-      
-      .mobile-menu-btn {
-        display: block;
-      }
-      
-      .user-profile {
-        flex-direction: column;
-        gap: 0.5rem;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .nav-container {
-        padding: 1rem;
-      }
-      
-      .main-container {
-        padding: 0 1rem;
-        margin: 1rem auto;
-      }
-      
-      .dashboard-header,
-      .complaints-section {
-        padding: 1.5rem;
-      }
-      
-      .welcome-section {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-      }
-      
-      .quick-actions {
-        flex-direction: column;
-      }
-      
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .filters {
-        flex-direction: column;
-      }
-    }
-    
-    /* Animation Classes */
-    .fade-in {
-      animation: fadeIn 0.5s ease-in;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .notification {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: white;
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-      z-index: 10000;
-      animation: slideIn 0.3s ease-out;
-    }
-    
-    @keyframes slideIn {
-      from { transform: translateX(100%); }
-      to { transform: translateX(0); }
-    }
+    .add-btn:hover {background: #005aac;}
   </style>
 </head>
 <body>
-  <!-- Modern Navbar -->
-  <nav class="navbar-modern" id="navbar">
-    <div class="nav-container">
-      <a href="index.html" class="nav-brand">
-        <div class="nav-brand-icon">
-          <i class="fas fa-landmark"></i>
-        </div>
-        <span>Rajasthan Seva Portal</span>
-      </a>
-      
-      <ul class="nav-menu" id="navMenu">
-        <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="dashboard.html" class="nav-link active"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
-        <li><a href="complaint.html" class="nav-link"><i class="fas fa-plus-circle"></i> File Complaint</a></li>
-        <li><a href="status.html" class="nav-link"><i class="fas fa-search"></i> Track Status</a></li>
-        <li><a href="#services" class="nav-link"><i class="fas fa-cogs"></i> Services</a></li>
-      </ul>
-      
-      <div class="flex items-center" style="gap: var(--space-4);">
-        <div class="profile-info">
-          <div class="profile-avatar" id="profileAvatar">U</div>
-          <span class="profile-name" id="userName">User</span>
-        </div>
-        <button class="btn btn-outline" id="logoutBtn" style="background: rgba(239, 68, 68, 0.1); color: var(--error); border-color: var(--error);">
-          <i class="fas fa-sign-out-alt"></i>
-          <span>Logout</span>
-        </button>
-      </div>
-      
-      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu" style="display: none;">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
+  <nav>
+    <span class="logo">Rajasthan Seva Portal</span>
+    <ul>
+      <li><a href="index.html">🏠 Home</a></li>
+      <li><a href="dashboard.html" style="color:#4fd2ff;">📊 Dashboard</a></li>
+      <li><a href="complaint.html">📝 Raise Complaint</a></li>
+      <li><a href="categories.html">📂 Category View</a></li>
+      <li><a href="status.html">📋 Track Status</a></li>
+      <li><a href="login.html" id="logoutBtn" style="background:#dc3545;">🚪 Logout</a></li>
+    </ul>
   </nav>
-
-  <!-- Main Container -->
-  <div class="main-container">
-    <!-- Dashboard Header -->
-    <div class="dashboard-header fade-in">
-      <div class="welcome-section">
-        <div class="welcome-text">
-          <h1>Welcome back! <span id="userWelcome">Citizen</span></h1>
-          <p>Track your complaints and stay updated with the latest status</p>
-        </div>
-        <div class="quick-actions">
-          <a href="complaint.html" class="action-btn">
-            <i class="fas fa-plus"></i>
-            New Complaint
-          </a>
-          <a href="status.html" class="action-btn secondary">
-            <i class="fas fa-search"></i>
-            Track Status
-          </a>
-        </div>
+  <div class="main">
+    <h2>Your Complaints</h2>
+    <button class="add-btn" onclick="window.location.href='complaint.html'">+ New Complaint</button>
+    <div class="filters">
+      <div>
+        <label for="catFilter">Category:</label>
+        <select id="catFilter">
+          <option value="">All</option>
+          <option value="Water">Water</option>
+          <option value="Electricity">Electricity</option>
+          <option value="Road">Road</option>
+          <option value="Sanitation">Sanitation</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div>
+        <label for="statusFilter">Status:</label>
+        <select id="statusFilter">
+          <option value="">All</option>
+          <option value="Registered">Registered</option>
+          <option value="Processing">Processing</option>
+          <option value="Review">Review</option>
+          <option value="Resolved">Resolved</option>
+        </select>
       </div>
     </div>
-
-    <!-- Stats Grid -->
-    <div class="stats-grid fade-in">
-      <div class="stat-card">
-        <div class="stat-header">
-          <div class="stat-icon icon-primary">
-            <i class="fas fa-file-alt"></i>
-          </div>
-        </div>
-        <div class="stat-number" id="totalComplaints">0</div>
-        <div class="stat-label">Total Complaints</div>
-      </div>
-      
-      <div class="stat-card">
-        <div class="stat-header">
-          <div class="stat-icon icon-warning">
-            <i class="fas fa-clock"></i>
-          </div>
-        </div>
-        <div class="stat-number" id="pendingComplaints">0</div>
-        <div class="stat-label">Pending</div>
-      </div>
-      
-      <div class="stat-card">
-        <div class="stat-header">
-          <div class="stat-icon icon-info">
-            <i class="fas fa-sync"></i>
-          </div>
-        </div>
-        <div class="stat-number" id="processingComplaints">0</div>
-        <div class="stat-label">Processing</div>
-      </div>
-      
-      <div class="stat-card">
-        <div class="stat-header">
-          <div class="stat-icon icon-success">
-            <i class="fas fa-check-circle"></i>
-          </div>
-        </div>
-        <div class="stat-number" id="resolvedComplaints">0</div>
-        <div class="stat-label">Resolved</div>
-      </div>
+    <div id="alert" class="alert" style="display:none"></div>
+    <div style="overflow-x:auto">
+    <table id="complaintsTable">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Location</th>
+          <th>Description</th>
+          <th>Date / Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="complaintsBody">
+        <!-- User's complaints will appear here -->
+      </tbody>
+    </table>
     </div>
-
-    <!-- Complaints Section -->
-    <div class="complaints-section fade-in">
-      <div class="section-header">
-        <h2 class="section-title">📋 My Complaints</h2>
-        <button class="action-btn" onclick="window.location.href='complaint.html'">
-          <i class="fas fa-plus"></i>
-          Add New
-        </button>
-      </div>
-      
-      <!-- Filters -->
-      <div class="filters">
-        <div class="filter-group">
-          <label class="filter-label">Category</label>
-          <select class="filter-select" id="catFilter">
-            <option value="">All Categories</option>
-            <option value="Water Supply">Water Supply</option>
-            <option value="Electricity">Electricity</option>
-            <option value="Roads">Roads</option>
-            <option value="Sanitation">Sanitation</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        
-        <div class="filter-group">
-          <label class="filter-label">Status</label>
-          <select class="filter-select" id="statusFilter">
-            <option value="">All Statuses</option>
-            <option value="Registered">Registered</option>
-            <option value="Processing">Processing</option>
-            <option value="Review">Under Review</option>
-            <option value="Resolved">Resolved</option>
-          </select>
-        </div>
-      </div>
-      
-      <!-- Alert Messages -->
-      <div id="alertContainer"></div>
-      
-      <!-- Complaints Table -->
-      <div class="table-container">
-        <table class="complaints-table">
-          <thead>
-            <tr>
-              <th>Category</th>
-              <th>Description</th>
-              <th>Location</th>
-              <th>Date Submitted</th>
-              <th>Status</th>
-              <th>Priority</th>
-            </tr>
-          </thead>
-          <tbody id="complaintsBody">
-            <!-- Complaints will be loaded here -->
-          </tbody>
-        </table>
-      </div>
-      
-      <!-- No Data Message -->
-      <div class="no-data" id="noDataMessage" style="display: none;">
-        <i class="fas fa-inbox"></i>
-        <h3>No Complaints Found</h3>
-        <p>You haven't submitted any complaints yet. <a href="complaint.html">Submit your first complaint</a></p>
-      </div>
-    </div>
+    <div class="no-data" id="nodata" style="display:none">No complaints found.</div>
   </div>
   <script>
-    // Initialize components
-    document.addEventListener('DOMContentLoaded', function() {
-      initializeAuth();
-      setupMobileMenu();
-      loadUserProfile();
-      loadComplaintsData();
-    });
-
-    // Authentication check
-    function initializeAuth() {
-      if (!localStorage.getItem('token')) {
-        window.location.href = 'login.html';
-        return;
-      }
-      
-      // Logout handler
-      document.getElementById('logoutBtn').addEventListener('click', function(e) {
-        e.preventDefault();
-        showConfirmDialog('Are you sure you want to logout?', function() {
-          localStorage.clear();
-          window.location.href = 'login.html';
-        });
-      });
+    // Redirect if not logged in / token missing
+    if (!localStorage.getItem('token')) {
+      window.location.href="login.html";
     }
-
-    // Mobile menu setup
-    function setupMobileMenu() {
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      const navMenu = document.getElementById('navMenu');
-      
-      if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
-          navMenu.classList.toggle('active');
-        });
-      }
-    }
-
-    // Load user profile
-    function loadUserProfile() {
-      const userName = localStorage.getItem('userName') || 'User';
-      const userEmail = localStorage.getItem('userEmail') || '';
-      
-      document.getElementById('userName').textContent = userName;
-      document.getElementById('userWelcome').textContent = userName;
-      document.getElementById('profileAvatar').textContent = userName.charAt(0).toUpperCase();
-    }
-
-    // Global variables
-    let rawComplaints = [];
+    document.getElementById('logoutBtn').onclick = function(e) {
+      e.preventDefault();
+      localStorage.clear();
+      window.location.href="login.html";
+    };
+    // Filters
     const catFilter = document.getElementById('catFilter');
     const statusFilter = document.getElementById('statusFilter');
-
-    // Alert system
-    function showAlert(message, type = 'error') {
-      const alertContainer = document.getElementById('alertContainer');
-      const alertElement = document.createElement('div');
-      alertElement.className = `alert alert-${type}`;
-      alertElement.innerHTML = `
-        <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'}"></i>
-        ${message}
-      `;
-      
-      alertContainer.appendChild(alertElement);
-      
-      setTimeout(() => {
-        if (alertElement.parentNode) {
-          alertElement.remove();
-        }
-      }, 5000);
+    let rawComplaints = [];
+    function showAlert(msg) {
+      let alertDiv = document.getElementById('alert');
+      alertDiv.style.display = '';
+      alertDiv.textContent = msg;
+      setTimeout(()=>{alertDiv.style.display='none'}, 2600);
     }
-
-    // Confirmation dialog
-    function showConfirmDialog(message, callback) {
-      if (confirm(message)) {
-        callback();
-      }
-    }
-
-    // Load complaints and stats
-    async function loadComplaintsData() {
+    // Fetch user's complaints on page load
+    async function loadComplaints() {
       try {
-        showLoading(true);
-        
-        const response = await fetch('/api/complaints', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          }
+        let res = await fetch("/api/complaints", {
+          headers: { "Authorization": "Bearer " + localStorage.getItem("token") }
         });
-
-        if (response.status === 401) {
-          localStorage.clear();
-          window.location.href = 'login.html';
-          return;
-        }
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch complaints');
-        }
-
-        const data = await response.json();
+        if (res.status==401) {localStorage.clear(); window.location.href="login.html"; return;}
+        let data = await res.json();
+        if(!res.ok) throw Error(data.msg || "Err fetching");
         rawComplaints = data;
-        
-        updateStatsCards();
         updateComplaintsTable();
-        setupFilterHandlers();
-        
-      } catch (error) {
-        console.error('Error loading complaints:', error);
-        showAlert('Failed to load complaints. Please try again.');
-      } finally {
-        showLoading(false);
+      } catch {
+        showAlert("Could not load complaints. Try again!");
       }
     }
-
-    // Update stats cards
-    function updateStatsCards() {
-      const stats = {
-        total: rawComplaints.length,
-        pending: rawComplaints.filter(c => c.status === 'Registered').length,
-        processing: rawComplaints.filter(c => c.status === 'Processing').length,
-        resolved: rawComplaints.filter(c => c.status === 'Resolved').length
-      };
-
-      document.getElementById('totalComplaints').textContent = stats.total;
-      document.getElementById('pendingComplaints').textContent = stats.pending;
-      document.getElementById('processingComplaints').textContent = stats.processing;
-      document.getElementById('resolvedComplaints').textContent = stats.resolved;
-      
-      // Animate numbers
-      animateNumbers(stats);
-    }
-
-    // Animate number counting
-    function animateNumbers(stats) {
-      Object.keys(stats).forEach(key => {
-        const element = document.getElementById(key === 'total' ? 'totalComplaints' : key + 'Complaints');
-        if (element) {
-          animateValue(element, 0, stats[key], 1000);
-        }
-      });
-    }
-
-    function animateValue(element, start, end, duration) {
-      let startTimestamp = null;
-      const step = (timestamp) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-        element.textContent = Math.floor(progress * (end - start) + start);
-        if (progress < 1) {
-          window.requestAnimationFrame(step);
-        }
-      };
-      window.requestAnimationFrame(step);
-    }
-
-    // Update complaints table
     function updateComplaintsTable() {
-      const tbody = document.getElementById('complaintsBody');
-      const noDataMessage = document.getElementById('noDataMessage');
-      
-      // Filter complaints
-      const filtered = rawComplaints.filter(complaint => {
-        const categoryMatch = !catFilter.value || complaint.category === catFilter.value;
-        const statusMatch = !statusFilter.value || complaint.status === statusFilter.value;
-        return categoryMatch && statusMatch;
-      });
-
-      // Clear existing content
-      tbody.innerHTML = '';
-
-      if (filtered.length === 0) {
-        noDataMessage.style.display = 'block';
+      let tBody = document.getElementById('complaintsBody');
+      let filtered = rawComplaints.filter(c=>
+        (!catFilter.value || c.category===catFilter.value) &&
+        (!statusFilter.value || c.status===statusFilter.value)
+      );
+      tBody.innerHTML = '';
+      if(filtered.length===0){
+        document.getElementById('nodata').style.display='';
         return;
+      } else {
+        document.getElementById('nodata').style.display='none';
       }
-
-      noDataMessage.style.display = 'none';
-
-      // Populate table
-      filtered.forEach(complaint => {
-        const row = createComplaintRow(complaint);
-        tbody.appendChild(row);
-      });
+      for(let c of filtered) {
+        tBody.innerHTML += `
+          <tr>
+            <td>${c.category||""}</td>
+            <td>${c.location||""}</td>
+            <td>${c.description||""}</td>
+            <td>${(new Date(c.createdAt)).toLocaleString()}</td>
+            <td class="status-cell"><span class="status-chip status-${c.status.replace(/\s/g,'')}">${c.status}</span></td>
+          </tr>`;
+      }
     }
-
-    // Create complaint table row
-    function createComplaintRow(complaint) {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td><strong>${complaint.category || 'N/A'}</strong></td>
-        <td class="description-cell">${truncateText(complaint.description || 'N/A', 60)}</td>
-        <td>${complaint.location || 'N/A'}</td>
-        <td>${formatDate(complaint.createdAt)}</td>
-        <td><span class="status-chip status-${complaint.status?.replace(/\s+/g, '')}">${complaint.status || 'Unknown'}</span></td>
-        <td><span class="priority-badge priority-${complaint.priority?.toLowerCase() || 'medium'}">${complaint.priority || 'Medium'}</span></td>
-      `;
-      return row;
-    }
-
-    // Utility functions
-    function truncateText(text, maxLength) {
-      if (text.length <= maxLength) return text;
-      return text.substring(0, maxLength) + '...';
-    }
-
-    function formatDate(dateString) {
-      const date = new Date(dateString);
-      return date.toLocaleDateString('en-IN', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-      });
-    }
-
-    // Setup filter handlers
-    function setupFilterHandlers() {
-      catFilter.addEventListener('change', updateComplaintsTable);
-      statusFilter.addEventListener('change', updateComplaintsTable);
-    }
-
-    // Loading state management
-    function showLoading(show) {
-      // You can implement a loading spinner here if needed
-      console.log(show ? 'Loading...' : 'Loaded');
-    }
-
-    // Real-time updates with Socket.IO (if available)
-    if (typeof io !== 'undefined') {
-      const socket = io();
-      
-      socket.on('complaintUpdate', function(data) {
-        // Find and update the complaint in our local array
-        const index = rawComplaints.findIndex(c => c._id === data._id);
-        if (index !== -1) {
-          rawComplaints[index] = data;
-          updateStatsCards();
-          updateComplaintsTable();
-          
-          // Show notification
-          showNotification('Complaint status updated!', 'success');
-        }
-      });
-    }
-
-    // Notification system
-    function showNotification(message, type = 'success') {
-      const notification = document.createElement('div');
-      notification.className = 'notification';
-      notification.innerHTML = `
-        <i class="fas ${type === 'success' ? 'fa-check' : 'fa-info'}"></i>
-        ${message}
-      `;
-      
-      document.body.appendChild(notification);
-      
-      setTimeout(() => {
-        if (notification.parentNode) {
-          notification.remove();
-        }
-      }, 3000);
-    }
-  </script>
-  <script src="assets/js/modern-framework.js"></script>
-  <script>
-    // Dashboard-specific enhancements
-    document.addEventListener('DOMContentLoaded', function() {
-      // Add loading states to stat cards
-      const statCards = document.querySelectorAll('.stat-card');
-      statCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-          this.style.transform = 'translateY(-8px) scale(1.02)';
-        });
-        card.addEventListener('mouseleave', function() {
-          this.style.transform = 'translateY(-5px) scale(1)';
-        });
-      });
-
-      // Enhanced notifications for dashboard actions
-      const actionBtns = document.querySelectorAll('.action-btn');
-      actionBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          if (this.textContent.includes('New Complaint')) {
-            showNotification('Redirecting to complaint form...', 'info');
-          } else if (this.textContent.includes('Track Status')) {
-            showNotification('Opening status tracker...', 'info');
-          }
-        });
-      });
-
-      // Add refresh functionality
-      const refreshBtn = document.createElement('button');
-      refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
-      refreshBtn.className = 'btn btn-secondary';
-      refreshBtn.style.position = 'fixed';
-      refreshBtn.style.bottom = '30px';
-      refreshBtn.style.left = '30px';
-      refreshBtn.style.zIndex = '1000';
-      refreshBtn.addEventListener('click', function() {
-        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing...';
-        setTimeout(() => {
-          loadComplaintsData();
-          this.innerHTML = '<i class="fas fa-sync-alt"></i> Refresh';
-          showNotification('Dashboard refreshed!', 'success');
-        }, 1500);
-      });
-      document.body.appendChild(refreshBtn);
-    });
+    catFilter.onchange = statusFilter.onchange = updateComplaintsTable;
+    window.onload = loadComplaints;
   </script>
 </body>
 </html>
